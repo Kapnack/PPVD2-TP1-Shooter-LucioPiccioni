@@ -16,8 +16,8 @@ MonoBehaviour:
   damage: 22
   maxDistance: 200
   consumtionRate: 1
-  currentAmmo: 120
-  maxAmmo: 120
+  currentAmmo: 20
+  maxAmmo: 20
   fireRate: 600
   reloadingTime: 1.5
   duration: 0.05
