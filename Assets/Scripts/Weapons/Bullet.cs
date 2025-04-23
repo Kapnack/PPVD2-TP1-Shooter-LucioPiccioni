@@ -4,20 +4,33 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 public class Bullet : MonoBehaviour
 {
-    private int damage = 12;
-    private float createdTime = 0;
+    private int damage = 0;
+
     [SerializeField] private float fireForce = 1000;
+
+    [SerializeField] private const float durationTime = 10.0f;
+
+    private float createdTime = 0;
 
     private Rigidbody rb;
 
-
-    private void Awake()
+    void Awake()
     {
+        createdTime = createdTime = Time.time;
         rb = GetComponent<Rigidbody>();
-
-        createdTime = Time.time;
     }
 
+    private void Update()
+    {
+        
+    }
+
+    public void SetUpDamage(int damage)
+    {
+        this.damage = damage;
+    }
+
+    public void SetDamege(int damage) => this.damage = damage;
     public void Fire() => rb.AddForce(transform.forward * fireForce, ForceMode.Impulse);
 
     private void OnCollisionEnter(Collision collision)

@@ -5,79 +5,28 @@ public class ProjectileGun : BaseGun
 {
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform tip;
-    bool isHoldingFire = false;
 
-    private float timeHoldingFire = 0;
-
-    private void OnEnable()
+    protected override void Reload()
     {
-        InputReader.FireEvent += OnShoot;
-        InputReader.HoldigFireEvent += OnHoldingFire;
-        InputReader.StopHoldigFireEvent += OnStopHoldingFire;
-
-        InputReader.ReloadEvent += OnReload;
-    }
-
-    private void OnDisable()
-    {
-        InputReader.FireEvent -= OnShoot;
-        InputReader.HoldigFireEvent -= OnHoldingFire;
-        InputReader.StopHoldigFireEvent -= OnStopHoldingFire;
-
-        InputReader.ReloadEvent -= OnReload;
-    }
-
-    private void Update()
-    {
-        timeSinceLastShot += Time.deltaTime;
-
-        if (isHoldingFire)
+        if (!reloading && !ammo.IsFull())
         {
-            timeHoldingFire += Time.deltaTime;
-
-            if (timeHoldingFire > 0.1f)
-                OnShoot();
+            reloading = true;
+            StartCoroutine(ammo.OnReload());
         }
     }
 
-    protected override void OnReload()
+    public override void Shoot()
     {
-        if (!gunData.reloading)
-            StartCoroutine(Reload());
+        var newBullet = Instantiate(bulletPrefab, tip.transform.position, tip.transform.rotation);
+
+        Bullet bulletScrip = newBullet.GetComponent<Bullet>();
+
+        bulletScrip.SetUpDamage(damage);
+
+        bulletScrip.Fire();
+
+        ammo.ReduceCurrentAmmo();
+
+        RumbleManager.Instance.RumblePulse(lowFrequency, highFrequency, duration);
     }
-
-    protected override IEnumerator Reload()
-    {
-        gunData.reloading = true;
-
-        yield return new WaitForSeconds(gunData.reloadingTime);
-
-        gunData.currentAmmo = gunData.maxAmmo;
-
-        gunData.reloading = false;
-    }
-
-    public override void OnShoot()
-    {
-        if (CanShoot())
-        {
-            var newBullet = Instantiate(bulletPrefab, tip.transform.position, tip.transform.rotation);
-
-            newBullet.GetComponent<Bullet>().Fire();
-
-            gunData.currentAmmo -= gunData.consumtionRate;
-            timeSinceLastShot = 0;
-
-            RumbleManager.Instance.RumblePulse(gunData.lowFrequency, gunData.highFrequency, gunData.duration);
-        }
-    }
-
-    public void OnHoldingFire() => isHoldingFire = true;
-    public void OnStopHoldingFire()
-    {
-        isHoldingFire = false;
-        timeHoldingFire = 0;
-    }
-
-    protected override bool CanShoot() => gunData.currentAmmo > 0 && !gunData.reloading && timeSinceLastShot > 1f / (gunData.fireRate / 60f);
 }

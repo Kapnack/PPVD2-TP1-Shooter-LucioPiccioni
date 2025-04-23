@@ -658,6 +658,94 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3097323892690424116, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3278488101811317590, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358571967721472703, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: damage
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358571967721472703, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: duration
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358571967721472703, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: fireRate
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358571967721472703, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: maxDistance
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358571967721472703, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: ammo.maxAmmo
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358571967721472703, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: lowFrequency
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358571967721472703, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: highFrequency
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358571967721472703, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: consumtionRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358571967721472703, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: ammo.currentAmmo
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358571967721472703, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: ammo.reloadingTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358571967721472703, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: ammo.consumtionRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376836601208728192, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: damage
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376836601208728192, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: duration
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376836601208728192, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: fireRate
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376836601208728192, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: ammo.maxAmmo
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376836601208728192, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: lowFrequency
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376836601208728192, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: highFrequency
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376836601208728192, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: ammo.currentAmmo
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376836601208728192, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: ammo.reloadingTime
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376836601208728192, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
+      propertyPath: ammo.consumtionRate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3932253087288615779, guid: 3d21c2e70bfa0db47b47f50162b1b2fa, type: 3}
       propertyPath: m_Name
       value: Player
