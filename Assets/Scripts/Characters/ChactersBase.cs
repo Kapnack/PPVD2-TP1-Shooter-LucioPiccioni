@@ -18,8 +18,8 @@ public abstract class ChactersBase : MonoBehaviour
 
     public int ActualShield
     {
-        set => _actualHealth = Mathf.Clamp(value, 0, maxShield);
-        get => _actualHealth;
+        set => _actualShield = Mathf.Clamp(value, 0, maxShield);
+        get => _actualShield;
     }
 
 

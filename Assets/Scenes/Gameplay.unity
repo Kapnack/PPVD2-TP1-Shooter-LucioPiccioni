@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f647d3e85d77b2449521965c272617c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1
+  maxHealth: 100
   maxShield: 12
 --- !u!136 &280447080
 CapsuleCollider:
@@ -621,7 +621,7 @@ GameObject:
   - component: {fileID: 631692868}
   - component: {fileID: 631692867}
   - component: {fileID: 631692866}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -867,6 +867,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6606963822047266811, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
+      propertyPath: xSensitivity
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6606963822047266811, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
+      propertyPath: ySensitivity
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 7465067483791310642, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
       propertyPath: m_Name
       value: Player
@@ -888,7 +896,7 @@ GameObject:
   - component: {fileID: 1135767086}
   - component: {fileID: 1135767085}
   - component: {fileID: 1135767084}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1597,7 +1605,7 @@ GameObject:
   - component: {fileID: 1899958730}
   - component: {fileID: 1899958729}
   - component: {fileID: 1899958728}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1835,12 +1843,12 @@ SceneRoots:
   m_Roots:
   - {fileID: 1753446756}
   - {fileID: 738586115}
+  - {fileID: 1519226998}
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1062358213}
   - {fileID: 308689650}
   - {fileID: 1325161936}
   - {fileID: 280447083}
-  - {fileID: 1519226998}
   - {fileID: 1347763708}
   - {fileID: 1603663871}

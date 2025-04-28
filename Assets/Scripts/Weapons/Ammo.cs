@@ -37,6 +37,8 @@ public class Ammo
         CurrentAmmo = maxAmmo;
 
         FinishReloading?.Invoke();
+
+        PlayerHudManager.Instance.UpdateAmmoHud();
     }
 
     public bool IsEmpty() => CurrentAmmo == 0;
