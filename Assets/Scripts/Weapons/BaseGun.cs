@@ -14,8 +14,9 @@ public abstract class BaseGun : MonoBehaviour
     [SerializeField][Range(0, 1)] protected float lowFrequency;
     [SerializeField][Range(0, 1)] protected float highFrequency;
 
-    [SerializeField] protected Ammo ammo = new Ammo();
+    [SerializeField] public Ammo ammo = new Ammo();
 
+    Coroutine realoadRef = null;
 
     protected bool isHoldingFire = false;
     protected bool reloading = false;
@@ -33,7 +34,10 @@ public abstract class BaseGun : MonoBehaviour
         InputReader.HoldigFireEvent += OnHoldingFire;
         InputReader.StopHoldigFireEvent += OnStopHoldingFire;
 
-        InputReader.ReloadEvent += Reload;
+        InputReader.ReloadEvent += TryReload;
+
+        InputReader.MeleeAttackEvent += CancelReload;
+        InputReader.MeleeAttackEvent += IsDoneReaload;
 
         ammo.FinishReloading += IsDoneReaload;
     }
@@ -44,9 +48,12 @@ public abstract class BaseGun : MonoBehaviour
         InputReader.HoldigFireEvent -= OnHoldingFire;
         InputReader.StopHoldigFireEvent -= OnStopHoldingFire;
 
-        InputReader.ReloadEvent -= Reload;
+        InputReader.ReloadEvent -= TryReload;
 
-        ammo.FinishReloading += IsDoneReaload;
+        InputReader.MeleeAttackEvent -= CancelReload;
+        InputReader.MeleeAttackEvent -= IsDoneReaload;
+
+        ammo.FinishReloading -= IsDoneReaload;
     }
 
     private void Update()
@@ -64,14 +71,29 @@ public abstract class BaseGun : MonoBehaviour
 
     protected void TryShoot()
     {
-        if (!ammo.IsEmpty() && Time.time - lastShotTime >= timeBetweenShots)
+        if (!ammo.IsEmpty() && !reloading && Time.time - lastShotTime >= timeBetweenShots)
         {
             Shoot();
             lastShotTime = Time.time;
         }
     }
 
-    protected abstract void Reload();
+    protected void TryReload()
+    {
+        if (!reloading && !ammo.IsFull())
+        {
+            reloading = true;
+            realoadRef = StartCoroutine(ammo.OnReload());
+        }
+    }
+
+    public void CancelReload()
+    {
+        if (realoadRef != null)
+        {
+            StopCoroutine(realoadRef);
+        }
+    }
 
     protected void IsDoneReaload() => reloading = false;
 

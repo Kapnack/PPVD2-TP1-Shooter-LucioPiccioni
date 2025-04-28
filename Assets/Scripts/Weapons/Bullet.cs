@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] private float fireForce = 1000;
 
-    [SerializeField] private const float durationTime = 10.0f;
+    [SerializeField] private const float durationTime = 2;
 
     private float createdTime = 0;
 
@@ -16,13 +16,14 @@ public class Bullet : MonoBehaviour
 
     void Awake()
     {
-        createdTime = createdTime = Time.time;
+        createdTime = Time.time;
         rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        
+        if (Time.time > createdTime + durationTime)
+            Destroy(gameObject);
     }
 
     public void SetUpDamage(int damage)
@@ -36,7 +37,7 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent<Enemy>(out var enemy))
-            enemy.OnDamage(damage);
+            enemy.ReduceHealth(damage);
 
         Destroy(gameObject);
     }

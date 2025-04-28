@@ -8,7 +8,7 @@ public class Ammo
     [SerializeField] private float maxAmmo;
     [SerializeField] private float consumtionRate;
     [SerializeField] private float reloadingTime;
-    [SerializeField] private float currentAmmo;
+    private float currentAmmo;
 
     public event Action FinishReloading;
 

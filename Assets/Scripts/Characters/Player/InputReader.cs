@@ -1,21 +1,28 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
-public class InputReader : Singleton<InputReader> 
+public class InputReader : Singleton<InputReader>
 {
     [SerializeField] private InputActionAsset inputAsset;
     InputActionMap actionMap;
 
-    InputAction actionMove;
-    InputAction actionJump;
-    InputAction actionLook;
-    InputAction actionFire;
-    InputAction actionReload;
+   private InputAction actionMove;
+   private InputAction actionJump;
+   private InputAction actionLook;
+   private InputAction actionFire;
+   private InputAction actionReload;
+   private InputAction actionChangeWeapon1;
+   private InputAction actionChangeWeapon2;
+   private InputAction actionMeleeAttack;
 
 
     public static event Action<Vector2> MoveEvent;
+
     public static event Action<Vector2> lookEvent;
+    public static event Action<Vector2> lookEventHolding;
+    public static event Action<Vector2> lookEventCanceled;
 
     public static event Action JumpEvent;
     public static event Action JumpHoldEvent;
@@ -27,8 +34,15 @@ public class InputReader : Singleton<InputReader>
 
     public static event Action ReloadEvent;
 
-    private void Awake()
+    public static event Action ChangeWeapon1Event;
+    public static event Action ChangeWeapon2Event;
+
+    public static event Action MeleeAttackEvent;
+
+    protected override void Awake()
     {
+        base.Awake();
+
         actionMap = inputAsset.FindActionMap("Player");
 
         actionMove = actionMap.FindAction("Move");
@@ -39,6 +53,11 @@ public class InputReader : Singleton<InputReader>
         actionFire = actionMap.FindAction("Fire");
 
         actionReload = actionMap.FindAction("Reload");
+
+        actionChangeWeapon1 = actionMap.FindAction("SelectWeapon1");
+        actionChangeWeapon2 = actionMap.FindAction("SelectWeapon2");
+
+        actionMeleeAttack = actionMap.FindAction("MeleeAttack");
     }
 
     private void OnEnable()
@@ -53,14 +72,19 @@ public class InputReader : Singleton<InputReader>
         actionJump.canceled += IsNotHoldingJump;
 
         actionLook.started += HandleLook;
-        actionLook.performed += HandleLook;
-        actionLook.canceled += HandleLook;
+        actionLook.performed += HandleLookHolding;
+        actionLook.canceled += HandleLookCanceled;
 
         actionFire.started += HandleFire;
         actionFire.performed += HandleHoldingFire;
         actionFire.canceled += HandleStopHoldingFire;
 
         actionReload.started += HandleReload;
+
+        actionChangeWeapon1.started += HandleChangeWeapon1;
+        actionChangeWeapon2.started += HandleChangeWeapon2;
+
+        actionMeleeAttack.started += HandleMeleeAttack;
     }
 
     private void OnDisable()
@@ -84,37 +108,59 @@ public class InputReader : Singleton<InputReader>
 
         actionReload.started -= HandleReload;
         actionReload.performed -= HandleHoldingFire;
+
+        actionReload.started -= HandleReload;
+
+        actionChangeWeapon1.started -= HandleChangeWeapon1;
+        actionChangeWeapon2.started -= HandleChangeWeapon2;
+
+        actionMeleeAttack.started -= HandleMeleeAttack;
     }
 
+
+    //----------------------------- MOVEMENT -------------------------------------------------
     private void HandleMoveInput(InputAction.CallbackContext ctx)
     {
         MoveEvent?.Invoke(ctx.ReadValue<Vector2>());
     }
 
+
+    //----------------------------- JUMPING --------------------------------------------------
     private void HandleJumpInput(InputAction.CallbackContext ctx)
     {
         JumpEvent?.Invoke();
     }
-
     private void IsHoldingJump(InputAction.CallbackContext ctx)
     {
         JumpHoldEvent?.Invoke();
     }
-
     private void IsNotHoldingJump(InputAction.CallbackContext ctx)
     {
         JumpReleaseEvent?.Invoke();
     }
+
+
+    //----------------------------- LOOK -----------------------------------------------------
     private void HandleLook(InputAction.CallbackContext ctx)
     {
         lookEvent?.Invoke(ctx.ReadValue<Vector2>());
     }
+    private void HandleLookHolding(InputAction.CallbackContext ctx)
+    {
+        lookEventHolding?.Invoke(ctx.ReadValue<Vector2>());
+    }
+    private void HandleLookCanceled(InputAction.CallbackContext ctx)
+    {
+        lookEventCanceled?.Invoke(ctx.ReadValue<Vector2>());
+    }
+    public Vector2 GetLookVector2() => actionLook.ReadValue<Vector2>();
 
+
+    //----------------------------- FIRE -----------------------------------------------------
     private void HandleFire(InputAction.CallbackContext ctx)
     {
         FireEvent?.Invoke();
     }
-
     private void HandleHoldingFire(InputAction.CallbackContext ctx)
     {
         HoldigFireEvent?.Invoke();
@@ -124,9 +170,27 @@ public class InputReader : Singleton<InputReader>
         StopHoldigFireEvent?.Invoke();
     }
 
+
+    //----------------------------- RELOAD ---------------------------------------------------
     private void HandleReload(InputAction.CallbackContext ctx)
     {
         ReloadEvent?.Invoke();
     }
 
+
+    //----------------------------- ChangeWeapong --------------------------------------------
+    private void HandleChangeWeapon1(InputAction.CallbackContext ctx)
+    {
+        ChangeWeapon1Event?.Invoke();
+    }
+    private void HandleChangeWeapon2(InputAction.CallbackContext ctx)
+    {
+        ChangeWeapon2Event?.Invoke();
+    }
+
+    //----------------------------- MeleeAttack --------------------------------------------
+    private void HandleMeleeAttack(InputAction.CallbackContext ctx)
+    {
+        MeleeAttackEvent?.Invoke();
+    }
 }

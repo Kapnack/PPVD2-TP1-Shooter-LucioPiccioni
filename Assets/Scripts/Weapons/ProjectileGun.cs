@@ -6,15 +6,6 @@ public class ProjectileGun : BaseGun
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform tip;
 
-    protected override void Reload()
-    {
-        if (!reloading && !ammo.IsFull())
-        {
-            reloading = true;
-            StartCoroutine(ammo.OnReload());
-        }
-    }
-
     public override void Shoot()
     {
         var newBullet = Instantiate(bulletPrefab, tip.transform.position, tip.transform.rotation);
