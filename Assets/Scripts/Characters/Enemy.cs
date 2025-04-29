@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy : ChactersBase
+public class Enemy : Characters
 {
 
     void Update()

@@ -8,10 +8,10 @@ public enum WeaponsType
     Projectile
 }
 
-public class Player : ChactersBase
+public class Player : Characters
 {
     [SerializeField] GameObject[] gunsPrefabs;
-    private List<BaseGun> gunsScripts = new List<BaseGun>();
+    private List<Gun> gunsScripts = new List<Gun>();
 
     private WeaponsType currentWeapon;
 
@@ -71,7 +71,7 @@ public class Player : ChactersBase
             gunsPrefabs[i].SetActive(i == weaponIndex);
         }
 
-        if (gunsPrefabs[weaponIndex].GetComponent<Gun>() != null)
+        if (gunsPrefabs[weaponIndex].GetComponent<HitScanGun>() != null)
             currentWeapon = WeaponsType.HitScan;
         else
             currentWeapon = WeaponsType.Projectile;
@@ -94,11 +94,11 @@ public class Player : ChactersBase
 
     public float GetCurrentWeaponAmmo()
     {
-        return gunsScripts[(int)currentWeapon].ammo.CurrentAmmo;
+        return gunsScripts[(int)currentWeapon].magazine.CurrentAmmo;
     }
 
     public float GetCurrentWeaponMaxAmmo()
     {
-        return gunsScripts[(int)currentWeapon].ammo.MaxAmmo;
+        return gunsScripts[(int)currentWeapon].magazine.MaxAmmo;
     }
 }

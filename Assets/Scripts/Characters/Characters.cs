@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public abstract class ChactersBase : MonoBehaviour
+public abstract class Characters : MonoBehaviour
 {
     [Header("Life")]
-    [SerializeField] public int maxHealth;
+    [SerializeField] public int maxHealth = 100;
     private int _actualHealth;
 
     [Header("Shield")]
-    [SerializeField] public int maxShield;
+    [SerializeField] public int maxShield = 50;
     private int _actualShield;
 
     public int ActualHealth

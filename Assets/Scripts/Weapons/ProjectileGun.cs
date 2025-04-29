@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ProjectileGun : BaseGun
+public class ProjectileGun : Gun
 {
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform tip;
@@ -16,7 +16,7 @@ public class ProjectileGun : BaseGun
 
         bulletScrip.Fire();
 
-        ammo.ReduceCurrentAmmo();
+        magazine.ReduceCurrentAmmo();
 
         RumbleManager.Instance.RumblePulse(lowFrequency, highFrequency, duration);
     }
