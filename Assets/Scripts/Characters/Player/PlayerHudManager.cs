@@ -37,24 +37,24 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
 
     public void OnEnable()
     {
-        InputReader.ChangeWeapon1Event += UpdateAmmoHud;
-        InputReader.ChangeWeapon2Event += UpdateAmmoHud;
-        InputReader.FireEvent += UpdateAmmoHud;
-        InputReader.HoldigFireEvent += OnHoldingFire;
-        InputReader.StopHoldigFireEvent += OnCanceledHoldingFire;
+        InputReader.Instance.ChangeWeapon1Event += UpdateAmmoHud;
+        InputReader.Instance.ChangeWeapon2Event += UpdateAmmoHud;
+        InputReader.Instance.FireEvent += UpdateAmmoHud;
+        InputReader.Instance.HoldigFireEvent += OnHoldingFire;
+        InputReader.Instance.StopHoldigFireEvent += OnCanceledHoldingFire;
 
-        InputReader.ReloadEvent += UpdateAmmoHud;
+        InputReader.Instance.ReloadEvent += UpdateAmmoHud;
     }
 
     public void OnDisable()
     {
-        InputReader.ChangeWeapon1Event -= UpdateAmmoHud;
-        InputReader.ChangeWeapon2Event -= UpdateAmmoHud;
-        InputReader.FireEvent -= UpdateAmmoHud;
-        InputReader.HoldigFireEvent -= OnHoldingFire;
-        InputReader.StopHoldigFireEvent -= OnCanceledHoldingFire;
+        InputReader.Instance.ChangeWeapon1Event -= UpdateAmmoHud;
+        InputReader.Instance.ChangeWeapon2Event -= UpdateAmmoHud;
+        InputReader.Instance.FireEvent -= UpdateAmmoHud;
+        InputReader.Instance.HoldigFireEvent -= OnHoldingFire;
+        InputReader.Instance.StopHoldigFireEvent -= OnCanceledHoldingFire;
 
-        InputReader.ReloadEvent -= UpdateAmmoHud;
+        InputReader.Instance.ReloadEvent -= UpdateAmmoHud;
     }
 
     private void Update()

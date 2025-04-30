@@ -46,14 +46,14 @@ public class Player : Characters
 
     private void OnEnable()
     {
-        InputReader.ChangeWeapon1Event += ChangeToWeapon1;
-        InputReader.ChangeWeapon2Event += ChangeToWeapon2;
+        InputReader.Instance.ChangeWeapon1Event += ChangeToWeapon1;
+        InputReader.Instance.ChangeWeapon2Event += ChangeToWeapon2;
     }
 
     private void OnDisable()
     {
-        InputReader.ChangeWeapon1Event -= ChangeToWeapon1;
-        InputReader.ChangeWeapon2Event -= ChangeToWeapon2;
+        InputReader.Instance.ChangeWeapon1Event -= ChangeToWeapon1;
+        InputReader.Instance.ChangeWeapon2Event -= ChangeToWeapon2;
     }
 
     protected override void OnDead()

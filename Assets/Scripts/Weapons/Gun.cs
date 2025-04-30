@@ -27,26 +27,26 @@ public abstract class Gun : MonoBehaviour
 
     private void OnEnable()
     {
-        InputReader.FireEvent += TryShoot;
-        InputReader.HoldigFireEvent += OnHoldingFire;
-        InputReader.StopHoldigFireEvent += OnStopHoldingFire;
+        InputReader.Instance.FireEvent += TryShoot;
+        InputReader.Instance.HoldigFireEvent += OnHoldingFire;
+        InputReader.Instance.StopHoldigFireEvent += OnStopHoldingFire;
 
-        InputReader.ReloadEvent += TryReload;
+        InputReader.Instance.ReloadEvent += TryReload;
 
-        InputReader.MeleeAttackEvent += CancelReload;
+        InputReader.Instance.MeleeAttackEvent += CancelReload;
 
         magazine.OnEnable();
     }
 
     private void OnDisable()
     {
-        InputReader.FireEvent -= TryShoot;
-        InputReader.HoldigFireEvent -= OnHoldingFire;
-        InputReader.StopHoldigFireEvent -= OnStopHoldingFire;
+        InputReader.Instance.FireEvent -= TryShoot;
+        InputReader.Instance.HoldigFireEvent -= OnHoldingFire;
+        InputReader.Instance.StopHoldigFireEvent -= OnStopHoldingFire;
 
-        InputReader.ReloadEvent -= TryReload;
+        InputReader.Instance.ReloadEvent -= TryReload;
 
-        InputReader.MeleeAttackEvent -= CancelReload;
+        InputReader.Instance.MeleeAttackEvent -= CancelReload;
 
         magazine.OnDisable();
 

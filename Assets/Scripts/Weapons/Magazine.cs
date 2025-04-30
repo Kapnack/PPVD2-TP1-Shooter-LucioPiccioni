@@ -32,14 +32,14 @@ public class Magazine
 
     public void OnEnable()
     {
-        InputReader.ReloadEvent += StartReload;
-        InputReader.MeleeAttackEvent += CancelReload;
+        InputReader.Instance.ReloadEvent += StartReload;
+        InputReader.Instance.MeleeAttackEvent += CancelReload;
     }
 
     public void OnDisable()
     {
-        InputReader.ReloadEvent -= StartReload;
-        InputReader.MeleeAttackEvent -= CancelReload;
+        InputReader.Instance.ReloadEvent -= StartReload;
+        InputReader.Instance.MeleeAttackEvent -= CancelReload;
 
         CancelReload();
     }

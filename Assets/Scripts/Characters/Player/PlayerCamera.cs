@@ -26,16 +26,16 @@ public class PlayerCamera : MonoBehaviour
 
     private void OnEnable()
     {
-        InputReader.lookEvent += OnMoveCamera;
-        InputReader.lookEventHolding += OnHoldingLook;
-        InputReader.lookEventCanceled += OnCanceledLook;
+        InputReader.Instance.lookEvent += OnMoveCamera;
+        InputReader.Instance.lookEventHolding += OnHoldingLook;
+        InputReader.Instance.lookEventCanceled += OnCanceledLook;
     }
 
     private void OnDisable()
     {
-        InputReader.lookEvent -= OnMoveCamera;
-        InputReader.lookEventHolding -= OnHoldingLook;
-        InputReader.lookEventCanceled -= OnCanceledLook;
+        InputReader.Instance.lookEvent -= OnMoveCamera;
+        InputReader.Instance.lookEventHolding -= OnHoldingLook;
+        InputReader.Instance.lookEventCanceled -= OnCanceledLook;
     }
 
     private void Update()

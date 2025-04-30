@@ -33,21 +33,21 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        InputReader.MoveEvent += OnMove;
+        InputReader.Instance.MoveEvent += OnMove;
 
-        InputReader.JumpEvent += OnJump;
-        InputReader.JumpHoldEvent += OnJumpHold;
-        InputReader.JumpReleaseEvent += OnJumpRelease;
+        InputReader.Instance.JumpEvent += OnJump;
+        InputReader.Instance.JumpHoldEvent += OnJumpHold;
+        InputReader.Instance.JumpReleaseEvent += OnJumpRelease;
     }
 
 
     private void OnDisable()
     {
-        InputReader.MoveEvent -= OnMove;
+        InputReader.Instance.MoveEvent -= OnMove;
 
-        InputReader.JumpEvent -= OnJump;
-        InputReader.JumpHoldEvent -= OnJumpHold;
-        InputReader.JumpReleaseEvent -= OnJumpRelease;
+        InputReader.Instance.JumpEvent -= OnJump;
+        InputReader.Instance.JumpHoldEvent -= OnJumpHold;
+        InputReader.Instance.JumpReleaseEvent -= OnJumpRelease;
     }
 
     private void FixedUpdate()

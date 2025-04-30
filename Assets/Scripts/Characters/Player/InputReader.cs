@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 
 public class InputReader : Singleton<InputReader>
 {
@@ -18,26 +17,26 @@ public class InputReader : Singleton<InputReader>
    private InputAction actionMeleeAttack;
 
 
-    public static event Action<Vector2> MoveEvent;
+    public event Action<Vector2> MoveEvent;
 
-    public static event Action<Vector2> lookEvent;
-    public static event Action<Vector2> lookEventHolding;
-    public static event Action<Vector2> lookEventCanceled;
+    public event Action<Vector2> lookEvent;
+    public event Action<Vector2> lookEventHolding;
+    public event Action<Vector2> lookEventCanceled;
 
-    public static event Action JumpEvent;
-    public static event Action JumpHoldEvent;
-    public static event Action JumpReleaseEvent;
+    public event Action JumpEvent;
+    public event Action JumpHoldEvent;
+    public event Action JumpReleaseEvent;
 
-    public static event Action FireEvent;
-    public static event Action HoldigFireEvent;
-    public static event Action StopHoldigFireEvent;
+    public event Action FireEvent;
+    public event Action HoldigFireEvent;
+    public event Action StopHoldigFireEvent;
 
-    public static event Action ReloadEvent;
+    public event Action ReloadEvent;
 
-    public static event Action ChangeWeapon1Event;
-    public static event Action ChangeWeapon2Event;
+    public event Action ChangeWeapon1Event;
+    public event Action ChangeWeapon2Event;
 
-    public static event Action MeleeAttackEvent;
+    public event Action MeleeAttackEvent;
 
     protected override void Awake()
     {
