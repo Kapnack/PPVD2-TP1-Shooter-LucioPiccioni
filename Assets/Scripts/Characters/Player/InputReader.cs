@@ -7,14 +7,15 @@ public class InputReader : Singleton<InputReader>
     [SerializeField] private InputActionAsset inputAsset;
     InputActionMap actionMap;
 
-   private InputAction actionMove;
-   private InputAction actionJump;
-   private InputAction actionLook;
-   private InputAction actionFire;
-   private InputAction actionReload;
-   private InputAction actionChangeWeapon1;
-   private InputAction actionChangeWeapon2;
-   private InputAction actionMeleeAttack;
+    private InputAction actionMove;
+    private InputAction actionJump;
+    private InputAction actionLook;
+    private InputAction actionFire;
+    private InputAction actionReload;
+    private InputAction actionChangeWeapon1;
+    private InputAction actionChangeWeapon2;
+    private InputAction actionMeleeAttack;
+    private InputAction actionPause;
 
 
     public event Action<Vector2> MoveEvent;
@@ -38,6 +39,8 @@ public class InputReader : Singleton<InputReader>
 
     public event Action MeleeAttackEvent;
 
+    public event Action PauseEvent;
+
     protected override void Awake()
     {
         base.Awake();
@@ -57,6 +60,8 @@ public class InputReader : Singleton<InputReader>
         actionChangeWeapon2 = actionMap.FindAction("SelectWeapon2");
 
         actionMeleeAttack = actionMap.FindAction("MeleeAttack");
+
+        actionPause = actionMap.FindAction("Pause");
     }
 
     private void OnEnable()
@@ -84,6 +89,8 @@ public class InputReader : Singleton<InputReader>
         actionChangeWeapon2.started += HandleChangeWeapon2;
 
         actionMeleeAttack.started += HandleMeleeAttack;
+
+        actionPause.started += HandlePause;
     }
 
     private void OnDisable()
@@ -191,5 +198,10 @@ public class InputReader : Singleton<InputReader>
     private void HandleMeleeAttack(InputAction.CallbackContext ctx)
     {
         MeleeAttackEvent?.Invoke();
+    }
+
+    private void HandlePause(InputAction.CallbackContext ctx)
+    {
+        PauseEvent?.Invoke();
     }
 }

@@ -8,7 +8,6 @@ public class SceneLoader : Singleton<SceneLoader>
 {
     [SerializeField] private List<string> scenesToKeep = new List<string> { "PersistantScene" };
 
-
     protected override void Awake()
     {
         base.Awake();
@@ -38,7 +37,7 @@ public class SceneLoader : Singleton<SceneLoader>
 
         StartCoroutine(UnloadAllExpetNeeded());
 
-        if (!IsSceneLoaded("PersistantGameplay"))
+        if (!SceneManager.GetSceneByName("PersistantGameplay").isLoaded)
             SceneManager.LoadScene("PersistantGameplay", LoadSceneMode.Additive);
 
         SceneManager.LoadSceneAsync("Tutorial", LoadSceneMode.Additive);
@@ -51,17 +50,13 @@ public class SceneLoader : Singleton<SceneLoader>
 
         StartCoroutine(UnloadAllExpetNeeded());
 
-        if (!IsSceneLoaded("PersistantGameplay"))
+        if (!SceneManager.GetSceneByName("PersistantGameplay").isLoaded)
             SceneManager.LoadScene("PersistantGameplay", LoadSceneMode.Additive);
 
         SceneManager.LoadSceneAsync("Gameplay", LoadSceneMode.Additive);
     }
 
-    public void LoadConfirmExit()
-    {
-        SceneManager.UnloadSceneAsync("MainMenu");
-        SceneManager.LoadSceneAsync("ConfirmExit", LoadSceneMode.Additive);
-    }
+    public void LoadConfirmExit() => SceneManager.LoadSceneAsync("ConfirmExit", LoadSceneMode.Additive);
 
     private IEnumerator UnloadAllExpetNeeded()
     {
@@ -88,18 +83,5 @@ public class SceneLoader : Singleton<SceneLoader>
                 yield return null;
             }
         }
-    }
-
-    bool IsSceneLoaded(string name)
-    {
-        for (int i = 0; i < SceneManager.sceneCount; i++)
-        {
-            Scene scene = SceneManager.GetSceneAt(i);
-
-            if (scene.name == name)
-                return true;
-        }
-
-        return false;
     }
 }

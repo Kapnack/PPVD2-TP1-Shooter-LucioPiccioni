@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ConfirmExit : MonoBehaviour
 {
@@ -17,6 +18,6 @@ public class ConfirmExit : MonoBehaviour
 
     public void CanceledExit()
     {
-        SceneLoader.Instance.LoadMainMenu();
+        SceneManager.UnloadSceneAsync("ConfirmExit");
     }
 }
