@@ -12,11 +12,20 @@ EditorBuildSettings:
     path: Assets/Scenes/PersistantScene.unity
     guid: 9c09ec98adacf354aa37664263defbb4
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 95f3efbf779c3dc4a9ad5fe478e1a557
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: 6a93a4926463783419002d8b9016232f
+  - enabled: 1
     path: Assets/Scenes/PersistantGameplay.unity
     guid: 6e182417d4c4ab14188e8ab1108d61b1
   - enabled: 1
     path: Assets/Scenes/Gameplay.unity
     guid: 5dc71d6116270f44e84c530c94b93138
+  - enabled: 1
+    path: Assets/Scenes/ConfirmExit.unity
+    guid: 6e5a0cfb30c4f4942879bb484381fc48
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

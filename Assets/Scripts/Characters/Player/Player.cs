@@ -82,23 +82,22 @@ public class Player : Characters
 
     }
 
-    private void ChangeToWeapon1()
+    private void ChangeToWeapon1() => ChangeWeapon(0);
+
+
+    private void ChangeToWeapon2() => ChangeWeapon(1);
+
+
+    public float GetCurrentWeaponAmmo() => gunsScripts[(int)currentWeapon].magazine.CurrentAmmo;
+
+
+    public float GetCurrentWeaponMaxAmmo() => gunsScripts[(int)currentWeapon].magazine.MaxAmmo;
+
+
+    public void AddKill()
     {
-        ChangeWeapon(0);
+        kills++;
+        PlayerHudManager.Instance.UpdateKillsHud();
     }
 
-    private void ChangeToWeapon2()
-    {
-        ChangeWeapon(1);
-    }
-
-    public float GetCurrentWeaponAmmo()
-    {
-        return gunsScripts[(int)currentWeapon].magazine.CurrentAmmo;
-    }
-
-    public float GetCurrentWeaponMaxAmmo()
-    {
-        return gunsScripts[(int)currentWeapon].magazine.MaxAmmo;
-    }
 }

@@ -13,7 +13,8 @@ public class HitScanGun : Gun
 
             if (hitInfo.transform.TryGetComponent<Enemy>(out Enemy enemyScript))
             {
-                enemyScript.ReduceHealth(damage);
+                if (enemyScript.IsDeadAfterDamage(damage) && owner is Player player)
+                        player.AddKill();
             }
         }
 

@@ -11,6 +11,5 @@ public class Enemy : Characters
     protected override void OnDead()
     {
         Destroy(gameObject);
-        PlayerHudManager.Instance.UpdateKillsHud();
     }
 }

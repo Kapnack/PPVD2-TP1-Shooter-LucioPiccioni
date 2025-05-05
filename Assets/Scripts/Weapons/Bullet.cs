@@ -14,6 +14,8 @@ public class Bullet : MonoBehaviour
 
     private Rigidbody rb;
 
+    private Characters owner;
+
     void Awake()
     {
         createdTime = Time.time;
@@ -26,18 +28,18 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void SetUpDamage(int damage)
-    {
-        this.damage = damage;
-    }
+    public void SetOwner(Characters owner) => this.owner = owner;
+    public void SetUpDamage(int damage) => this.damage = damage;
 
-    public void SetDamege(int damage) => this.damage = damage;
     public void Fire() => rb.AddForce(transform.forward * fireForce, ForceMode.Impulse);
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent<Enemy>(out var enemy))
-            enemy.ReduceHealth(damage);
+            if (enemy.IsDeadAfterDamage(damage) && owner is Player player)
+                player.AddKill();
+
+
 
         Destroy(gameObject);
     }

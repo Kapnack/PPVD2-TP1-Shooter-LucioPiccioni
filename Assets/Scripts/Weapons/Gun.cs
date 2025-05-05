@@ -21,8 +21,11 @@ public abstract class Gun : MonoBehaviour
 
     private float timeHoldingFire = 0;
 
+    protected Characters owner;
+
     private void Awake()
     {
+        owner = GetComponentInParent<Characters>();
     }
 
     private void OnEnable()

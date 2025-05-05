@@ -23,7 +23,7 @@ public abstract class Characters : MonoBehaviour
     }
 
 
-    public void ReduceHealth(int damage)
+    public bool IsDeadAfterDamage(int damage)
     {
         if (_actualShield > 0)
         {
@@ -41,11 +41,16 @@ public abstract class Characters : MonoBehaviour
             ActualHealth -= damage;
         }
 
-        if (ActualShield == 0 && ActualHealth == 0)
+        if (isDead())
         {
-            Destroy(gameObject);
+            OnDead();
+            return true;
         }
+
+        return false;
     }
+
+    private bool isDead() => ActualShield == 0 && ActualHealth == 0;
 
     protected abstract void OnDead();
 
