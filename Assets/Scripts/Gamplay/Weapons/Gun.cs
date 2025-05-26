@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public abstract class Gun : MonoBehaviour
 {
     [Header("Shooting")]
@@ -15,52 +16,47 @@ public abstract class Gun : MonoBehaviour
 
     [SerializeField] public Magazine magazine = new Magazine();
 
-    protected bool isHoldingFire = false;
+    private Rigidbody rb;
+    private BoxCollider collitionBox;
 
-    private float timeHoldingFire = 0;
+    static private float dropForwardForce = 5;
+    static private float dropUpwardForce = 3;
+
+    private int dropedLayer;
+    private int grabedLayer;
 
     protected Characters owner;
 
     private void Awake()
     {
-        owner = GetComponentInParent<Characters>();
-    }
+        rb = GetComponent<Rigidbody>();
 
-    private void OnEnable()
-    {
+        collitionBox = GetComponent<BoxCollider>();
 
+        dropedLayer = LayerMask.NameToLayer("Interactable");
+        grabedLayer = LayerMask.NameToLayer("Weapon");
     }
 
     private void OnDisable()
     {
         magazine.CancelReload();
-
-        OnStopHoldingFire();
     }
 
     private void Update()
     {
-        if (isHoldingFire)
-        {
-            timeHoldingFire += Time.deltaTime;
-
-            if (timeHoldingFire > 0.1f)
-                TryShoot();
-        }
-
         if (magazine.Reloading)
         {
-           magazine.DoneReloading();
+            magazine.DoneReloading();
         }
     }
 
-    public abstract void Shoot();
+    protected abstract void OnFire();
 
-    protected void TryShoot()
+    public void TryFire()
     {
         if (!magazine.IsEmpty() && !magazine.Reloading && Time.time - lastShotTime >= timeBetweenShots)
         {
-            Shoot();
+            OnFire();
             lastShotTime = Time.time;
         }
     }
@@ -69,16 +65,44 @@ public abstract class Gun : MonoBehaviour
     {
         if (!magazine.Reloading && !magazine.IsFull())
         {
-           magazine.StartReload();
+            magazine.StartReload();
         }
     }
 
-    public void OnHoldingFire() => isHoldingFire = true;
-
-    protected void OnStopHoldingFire()
+    public void Grab(Player owner, Transform hand)
     {
-        isHoldingFire = false;
-        timeHoldingFire = 0;
+        transform.SetParent(hand);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.Euler(Vector3.zero);
+        transform.localScale = Vector3.one;
+
+        rb.isKinematic = true;
+
+        gameObject.layer = grabedLayer;
+
+        collitionBox.enabled = false;
+
+        this.owner = owner;
+    }
+
+    public void Drop()
+    {
+        transform.SetParent(null);
+
+        rb.isKinematic = false;
+
+        rb.AddForce(transform.forward * dropForwardForce, ForceMode.Impulse);
+        rb.AddForce(transform.up * dropUpwardForce, ForceMode.Impulse);
+
+        float random = Random.Range(-1f, 1f);
+
+        rb.AddTorque(new Vector3(random, random, random) * 10);
+
+        gameObject.layer = dropedLayer;
+
+        collitionBox.enabled = true;
+
+        this.owner = null;
     }
 
     private void OnValidate()

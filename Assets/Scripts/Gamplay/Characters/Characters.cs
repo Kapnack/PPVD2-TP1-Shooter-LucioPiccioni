@@ -4,26 +4,26 @@ public abstract class Characters : MonoBehaviour
 {
     [Header("Life")]
     [SerializeField] public int maxHealth = 100;
-    private int _actualHealth;
+    private float _actualHealth;
 
     [Header("Shield")]
     [SerializeField] public int maxShield = 50;
-    private int _actualShield;
+    private float _actualShield;
 
-    public int ActualHealth
+    public float ActualHealth
     {
         set => _actualHealth = Mathf.Clamp(value, 0, maxHealth);
         get => _actualHealth;
     }
 
-    public int ActualShield
+    public float ActualShield
     {
         set => _actualShield = Mathf.Clamp(value, 0, maxShield);
         get => _actualShield;
     }
 
 
-    public bool IsDeadAfterDamage(int damage)
+    public virtual void ReciveDamage(float damage)
     {
         if (_actualShield > 0)
         {
@@ -31,7 +31,7 @@ public abstract class Characters : MonoBehaviour
 
             if (_actualShield < 0)
             {
-                int remainingDamage = -_actualShield;
+                float remainingDamage = -_actualShield;
                 _actualShield = 0;
                 ActualHealth -= remainingDamage;
             }
@@ -41,16 +41,11 @@ public abstract class Characters : MonoBehaviour
             ActualHealth -= damage;
         }
 
-        if (isDead())
-        {
+        if(IsDead())
             OnDead();
-            return true;
-        }
-
-        return false;
     }
 
-    private bool isDead() => ActualShield == 0 && ActualHealth == 0;
+    public virtual bool IsDead() => ActualShield == 0 && ActualHealth == 0;
 
     protected abstract void OnDead();
 

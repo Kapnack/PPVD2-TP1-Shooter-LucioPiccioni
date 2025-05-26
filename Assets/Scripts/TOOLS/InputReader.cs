@@ -16,6 +16,8 @@ public class InputReader : MonoBehaviour
     private InputAction actionChangeWeapon2;
     private InputAction actionMeleeAttack;
     private InputAction actionPause;
+    private InputAction actionInteract;
+    private InputAction actionDropWeapon;
 
     public event Action<Vector2> MoveEvent;
 
@@ -40,6 +42,10 @@ public class InputReader : MonoBehaviour
 
     public event Action PauseEvent;
 
+    public event Action InteractEvent;
+
+    public event Action DropWeaponEvent;
+
     protected void Awake()
     {
         ServiceProvider.SetService(this);
@@ -61,6 +67,10 @@ public class InputReader : MonoBehaviour
         actionMeleeAttack = actionMap.FindAction("MeleeAttack");
 
         actionPause = actionMap.FindAction("Pause");
+
+        actionInteract = actionMap.FindAction("Interact");
+
+        actionDropWeapon = actionMap.FindAction("DropWeapon");
     }
 
     private void OnEnable()
@@ -90,6 +100,20 @@ public class InputReader : MonoBehaviour
         actionMeleeAttack.started += HandleMeleeAttack;
 
         actionPause.started += HandlePause;
+
+        actionInteract.started += HandleInteract;
+
+        actionDropWeapon.started += HandleDropWeapon;
+    }
+
+    private void HandleDropWeapon(InputAction.CallbackContext context)
+    {
+        DropWeaponEvent?.Invoke();
+    }
+
+    private void HandleInteract(InputAction.CallbackContext context)
+    {
+        InteractEvent?.Invoke();
     }
 
     private void OnDisable()
@@ -120,6 +144,12 @@ public class InputReader : MonoBehaviour
         actionChangeWeapon2.started -= HandleChangeWeapon2;
 
         actionMeleeAttack.started -= HandleMeleeAttack;
+
+        actionPause.started -= HandlePause;
+
+        actionInteract.started -= HandleInteract;
+
+        actionDropWeapon.started -= HandleDropWeapon;
     }
 
 

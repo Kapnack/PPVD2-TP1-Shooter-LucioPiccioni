@@ -38,14 +38,13 @@ public class Magazine
 
     public void DoneReloading()
     {
+        reloading = true;
+
         if (Time.time > realoadStarted + reloadingTime && reloading)
         {
             CurrentAmmo = maxAmmo;
-            PlayerHudManager.Instance.UpdateAmmoHud();
             reloading = false;
         }
-
-        reloading = true;
     }
 
     public void StartReload()

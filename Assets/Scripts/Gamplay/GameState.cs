@@ -3,33 +3,97 @@ using UnityEngine.SceneManagement;
 
 public class GameState : MonoBehaviour
 {
+    [SerializeField] GameObject pauseMenu;
+
+    InputReader inputReader;
+    SceneLoader sceneLoader;
+
+    private void Awake()
+    {
+        if (ServiceProvider.TryGetService<InputReader>(out var inputReader))
+            this.inputReader = inputReader;
+
+        if (ServiceProvider.TryGetService<SceneLoader>(out var sceneLoader))
+            this.sceneLoader = sceneLoader;
+
+        pauseMenu.SetActive(false);
+
+    }
+
+    private void Start()
+    {
+        HideCursor();
+    }
+
     private void OnEnable()
     {
-        InputReader.Instance.PauseEvent += OnPause;
+        inputReader.PauseEvent += OnPause;
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+       ShowCursor();
+    }
+
+    private void OnDisable()
+    {
+        inputReader.PauseEvent -= OnPause;
     }
 
     private void OnPause()
     {
-        if (!SceneManager.GetSceneByName("Pause").isLoaded)
+        if (!pauseMenu.activeInHierarchy)
         {
-            SceneManager.LoadScene("Pause", LoadSceneMode.Additive);
+            pauseMenu.SetActive(true);
 
-            Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;
+            ShowCursor();
 
             Time.timeScale = 0.0f;
         }
         else
         {
-            SceneManager.UnloadSceneAsync("Pause");
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-
             Time.timeScale = 1.0f;
+
+            pauseMenu.SetActive(false);
+
+            HideCursor();
+
         }
+    }
+
+    public void WantToExit()
+    {
+        sceneLoader.LoadScene("ConfirmExit", LoadSceneMode.Additive, false);
+    }
+
+    public void GoToMenu()
+    {
+        Time.timeScale = 1.0f;
+
+        sceneLoader.UnloadScene("PersistantGameplay");
+        sceneLoader.UnloadScene("Gameplay");
+
+        sceneLoader.LoadScene("MainMenu", LoadSceneMode.Additive, false);
+
+    }
+
+    public void Continue()
+    {
+        Time.timeScale = 1.0f;
+
+        pauseMenu.SetActive(false);
+
+        HideCursor();
+
+
+    }
+
+    private void HideCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    private void ShowCursor()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
     }
 }

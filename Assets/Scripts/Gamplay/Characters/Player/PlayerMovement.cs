@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent (typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Jump Stats")]
@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody rb;
 
+    private InputReader inputReader;
+
     private bool isJumpRequested;
     private bool isHoldingJump;
     private int consecutiveJumps = 0;
@@ -26,25 +28,28 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        if (ServiceProvider.TryGetService<InputReader>(out var inputReader))
+            this.inputReader = inputReader;
     }
 
     private void OnEnable()
     {
-        InputReader.Instance.MoveEvent += OnMove;
+        inputReader.MoveEvent += OnMove;
 
-        InputReader.Instance.JumpEvent += OnJump;
-        InputReader.Instance.JumpHoldEvent += OnJumpHold;
-        InputReader.Instance.JumpReleaseEvent += OnJumpRelease;
+        inputReader.JumpEvent += OnJump;
+        inputReader.JumpHoldEvent += OnJumpHold;
+        inputReader.JumpReleaseEvent += OnJumpRelease;
     }
 
 
     private void OnDisable()
     {
-        InputReader.Instance.MoveEvent -= OnMove;
+        inputReader.MoveEvent -= OnMove;
 
-        InputReader.Instance.JumpEvent -= OnJump;
-        InputReader.Instance.JumpHoldEvent -= OnJumpHold;
-        InputReader.Instance.JumpReleaseEvent -= OnJumpRelease;
+        inputReader.JumpEvent -= OnJump;
+        inputReader.JumpHoldEvent -= OnJumpHold;
+        inputReader.JumpReleaseEvent -= OnJumpRelease;
     }
 
     private void FixedUpdate()

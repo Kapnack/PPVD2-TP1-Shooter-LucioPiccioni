@@ -20,6 +20,8 @@ public class Bullet : MonoBehaviour
     {
         createdTime = Time.time;
         rb = GetComponent<Rigidbody>();
+
+        rb.isKinematic = true;
     }
 
     private void Update()
@@ -36,10 +38,12 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent<Enemy>(out var enemy))
-            if (enemy.IsDeadAfterDamage(damage) && owner is Player player)
+        {
+            enemy.ReciveDamage(damage);
+
+            if (enemy.IsDead() && owner is Player player)
                 player.AddKill();
-
-
+        }
 
         Destroy(gameObject);
     }

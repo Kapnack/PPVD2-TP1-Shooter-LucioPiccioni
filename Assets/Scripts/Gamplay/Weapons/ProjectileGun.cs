@@ -6,7 +6,7 @@ public class ProjectileGun : Gun
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform tip;
 
-    public override void Shoot()
+    protected override void OnFire()
     {
         var newBullet = Instantiate(bulletPrefab, tip.transform.position, tip.transform.rotation);
 

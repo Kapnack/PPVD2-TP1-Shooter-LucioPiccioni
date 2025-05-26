@@ -4,7 +4,7 @@ public class HitScanGun : Gun
 {
     [SerializeField] float maxDistance = 0.0f;
 
-    public override void Shoot()
+    protected override void OnFire()
     {
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hitInfo, maxDistance))
         {
@@ -13,8 +13,10 @@ public class HitScanGun : Gun
 
             if (hitInfo.transform.TryGetComponent<Enemy>(out Enemy enemyScript))
             {
-                if (enemyScript.IsDeadAfterDamage(damage) && owner is Player player)
-                        player.AddKill();
+                enemyScript.ReciveDamage(damage);
+
+                if (enemyScript.IsDead() && owner is Player player)
+                    player.AddKill();
             }
         }
 

@@ -1,8 +1,7 @@
-using System;
 using TMPro;
 using UnityEngine;
 
-public class PlayerHudManager : Singleton<PlayerHudManager>
+public class PlayerHudManager : MonoBehaviour
 {
     [SerializeField] private GameObject player;
     private Player playerScript;
@@ -19,11 +18,14 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
     private TextMeshProUGUI shieldText;
     private TextMeshProUGUI ammoText;
 
+    private InputReader inputReader;
+
     private bool shouldUpdateAmmo = false;
 
-    protected override void Awake()
+    protected void Awake()
     {
-        base.Awake();
+        if (ServiceProvider.TryGetService<InputReader>(out var inputReader))
+            this.inputReader = inputReader;
 
         playerScript = player.GetComponent<Player>();
 
@@ -37,30 +39,39 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
 
     public void OnEnable()
     {
-        InputReader.Instance.ChangeWeapon1Event += UpdateAmmoHud;
-        InputReader.Instance.ChangeWeapon2Event += UpdateAmmoHud;
-        InputReader.Instance.FireEvent += UpdateAmmoHud;
-        InputReader.Instance.HoldigFireEvent += OnHoldingFire;
-        InputReader.Instance.StopHoldigFireEvent += OnCanceledHoldingFire;
+        inputReader.ChangeWeapon1Event += UpdateAmmoHud;
+        inputReader.ChangeWeapon2Event += UpdateAmmoHud;
+        inputReader.FireEvent += UpdateAmmoHud;
+        inputReader.HoldigFireEvent += OnHoldingFire;
+        inputReader.StopHoldigFireEvent += OnCanceledHoldingFire;
 
-        InputReader.Instance.ReloadEvent += UpdateAmmoHud;
+        inputReader.ReloadEvent += UpdateAmmoHud;
+
+        inputReader.DropWeaponEvent += UpdateAmmoHud;
+        inputReader.InteractEvent += UpdateAmmoHud;
     }
 
     public void OnDisable()
     {
-        InputReader.Instance.ChangeWeapon1Event -= UpdateAmmoHud;
-        InputReader.Instance.ChangeWeapon2Event -= UpdateAmmoHud;
-        InputReader.Instance.FireEvent -= UpdateAmmoHud;
-        InputReader.Instance.HoldigFireEvent -= OnHoldingFire;
-        InputReader.Instance.StopHoldigFireEvent -= OnCanceledHoldingFire;
+        inputReader.ChangeWeapon1Event -= UpdateAmmoHud;
+        inputReader.ChangeWeapon2Event -= UpdateAmmoHud;
+        inputReader.FireEvent -= UpdateAmmoHud;
+        inputReader.HoldigFireEvent -= OnHoldingFire;
+        inputReader.StopHoldigFireEvent -= OnCanceledHoldingFire;
 
-        InputReader.Instance.ReloadEvent -= UpdateAmmoHud;
+        inputReader.ReloadEvent -= UpdateAmmoHud;
+
+        inputReader.DropWeaponEvent -= UpdateAmmoHud;
+        inputReader.InteractEvent -= UpdateAmmoHud;
     }
 
     private void Update()
     {
         if (shouldUpdateAmmo)
             UpdateAmmoHud();
+
+        UpdateHealthHud();
+        UpdateShieldHud();
     }
 
     public void UpdateKillsHud()
@@ -68,14 +79,14 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         killsText.text = "Kills: " + playerScript.Kills;
     }
 
-    public void UpdateHealthsHud(int health)
+    public void UpdateHealthHud()
     {
-        healthText.text = "Health: " + health;
+        healthText.text = "HP: " + playerScript.ActualHealth + " / " + playerScript.maxHealth;
     }
 
-    public void UpdateShieldHud(int health)
+    public void UpdateShieldHud()
     {
-        shieldText.text = "Shield: " + health;
+        shieldText.text = "ARM: " + playerScript.ActualShield + " / " + playerScript.maxShield;
     }
 
 
