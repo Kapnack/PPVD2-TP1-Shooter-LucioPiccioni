@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -5,12 +6,12 @@ public class SceneLoader : MonoBehaviour
 {
     private void Awake()
     {
-        ServiceProvider.SetService(this);
+        ServiceProvider.SetService(this, true);
 
         LoadScene("MainMenu", LoadSceneMode.Additive, false);
     }
 
-    public void LoadScene(int index, LoadSceneMode mode, bool Async)
+    public void LoadScene(int index, LoadSceneMode mode, bool Async = false)
     {
         if (IsPlayableScene(index) && !IsSceneLoaded(2))
             SceneManager.LoadScene(2, LoadSceneMode.Single);
@@ -34,13 +35,13 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-    public void LoadScene(int[] scenes, LoadSceneMode mode, bool Async)
+    public void LoadScene(int[] scenes, LoadSceneMode mode, bool Async = false)
     {
         for (int i = 0; i < scenes.Length; i++)
             LoadScene(scenes[i], mode, Async);
     }
 
-    public void LoadScene(string scene, LoadSceneMode mode, bool Async)
+    public void LoadScene(string scene, LoadSceneMode mode, bool Async = false)
     {
         if (IsPlayableScene(scene) && !IsSceneLoaded("PersistantGameplay"))
             SceneManager.LoadScene("PersistantGameplay", LoadSceneMode.Additive);
@@ -63,7 +64,7 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-    public void LoadScene(string[] scenes, LoadSceneMode mode, bool Async)
+    public void LoadScene(string[] scenes, LoadSceneMode mode, bool Async = false)
     {
         for (int i = 0; i < scenes.Length; i++)
             LoadScene(scenes, mode, Async);

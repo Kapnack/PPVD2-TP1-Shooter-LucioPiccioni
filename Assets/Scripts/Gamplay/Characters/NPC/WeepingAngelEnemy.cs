@@ -13,15 +13,12 @@ public class WeepingAngelEnemy : Enemy
     private Rigidbody rb;
     private Vector3 initialPosition;
 
-    private void Awake()
+    protected override void Start()
     {
+        base.Start();
+
         rb = GetComponent<Rigidbody>();
         initialPosition = transform.position;
-
-        if (iPlayer == null && ServiceProvider.TryGetService<IPlayer>(out var player))
-        {
-            iPlayer = player;
-        }
     }
 
     private void FixedUpdate()
@@ -29,7 +26,7 @@ public class WeepingAngelEnemy : Enemy
         if (iPlayer == null) return;
 
         Vector3 playerPos = iPlayer.getPos();
-        Vector3 dirToPlayer = (playerPos - transform.position);
+        Vector3 dirToPlayer = playerPos - transform.position;
         dirToPlayer.y = 0;
 
         if (!iPlayer.IsLookingAt(transform.position))
@@ -75,11 +72,11 @@ public class WeepingAngelEnemy : Enemy
             iPlayer.ReciveDamage(explosionDamage);
         }
 
-        OnDead();
+        DieAndNotify();
     }
 
     protected override void OnDead()
     {
-        Destroy(gameObject);
+        DieAndNotify();
     }
 }

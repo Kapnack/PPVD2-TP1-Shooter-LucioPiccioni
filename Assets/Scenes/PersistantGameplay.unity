@@ -852,6 +852,14 @@ PrefabInstance:
       propertyPath: m_ExcludeLayers.m_Bits
       value: 3775
       objectReference: {fileID: 0}
+    - target: {fileID: 1183014537996170955, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
+      propertyPath: jumpForce
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183014537996170955, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
+      propertyPath: jumpHoldForce
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1457077970044450219, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
       propertyPath: ammo.reloadingTime
       value: 2

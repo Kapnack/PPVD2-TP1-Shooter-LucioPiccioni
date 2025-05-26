@@ -20,8 +20,6 @@ public class Bullet : MonoBehaviour
     {
         createdTime = Time.time;
         rb = GetComponent<Rigidbody>();
-
-        rb.isKinematic = true;
     }
 
     private void Update()

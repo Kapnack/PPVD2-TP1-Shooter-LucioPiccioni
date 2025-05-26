@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum Slots
@@ -10,6 +9,8 @@ public enum Slots
 
 public class Player : Characters, IPlayer
 {
+    public static IGameplayManager gameplayManager;
+
     [Header("Dependencies")]
     [SerializeField] private Camera cam;
     [SerializeField] private Transform weaponGrabPos;
@@ -46,7 +47,7 @@ public class Player : Characters, IPlayer
                 gunsScripts[i].Grab(this, weaponGrabPos);
             }
 
-            gunsObj[i].SetActive(i == 0); // Activa sólo el primer arma
+            gunsObj[i].SetActive(i == 0);
         }
 
         ServiceProvider.SetService<IPlayer>(this, true);
@@ -93,10 +94,8 @@ public class Player : Characters, IPlayer
 
     protected override void OnDead()
     {
-        // TODO: Implementar comportamiento de muerte si es necesario
+        gameplayManager?.NotifyPlayerDeath();
     }
-
-    // ───────────────────────────────────────────── Fire & Weapons ─────────────────────────────────────────────
 
     private void Fire()
     {

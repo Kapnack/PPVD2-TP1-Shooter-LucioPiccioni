@@ -1,7 +1,8 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class GameplayManager : MonoBehaviour
+public class GameplayManager : MonoBehaviour, IGameplayManager
 {
     [Header("Enemy Settings")]
     [SerializeField] private GameObject[] enemyPrefabs;
@@ -10,14 +11,18 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private GameObject platform;
 
     private List<Characters> activeEnemies = new List<Characters>();
-    private IPlayer player;
 
     private bool gameEnded = false;
 
-    private void Start()
+    SceneLoader sceneLoader;
+
+    private void Awake()
     {
-        if (ServiceProvider.TryGetService<IPlayer>(out var iPlayer))
-            player = iPlayer;
+        if (ServiceProvider.TryGetService<SceneLoader>(out var sceneLoader))
+            this.sceneLoader = sceneLoader;
+
+        Enemy.gameplayManager = this;
+        Player.gameplayManager = this;
 
         for (int i = 0; i < enemiesToSpawn; i++)
         {
@@ -51,35 +56,37 @@ public class GameplayManager : MonoBehaviour
         GameObject prefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
         GameObject enemyGO = Instantiate(prefab, spawnPos, Quaternion.identity);
 
+        // ⬇️ ¡Mover a la misma escena del GameplayManager!
+        SceneManager.MoveGameObjectToScene(enemyGO, gameObject.scene);
+
         if (enemyGO.TryGetComponent<Characters>(out var enemy))
         {
             activeEnemies.Add(enemy);
         }
     }
 
-    private void CheckGameState()
+    public void NotifyEnemyDeath(Characters enemy)
     {
         if (gameEnded) return;
 
-        if (player == null || player.IsDead())
-        {
-            gameEnded = true;
-            OnPlayerLose();
+        activeEnemies.Remove(enemy);
+        CheckVictoryCondition();
+    }
 
+    public void NotifyPlayerDeath()
+    {
+        if (gameEnded) return;
+
+        gameEnded = true;
+        OnPlayerLose();
+    }
+
+    private void CheckVictoryCondition()
+    {
+        if (activeEnemies.Count > 0)
             return;
-        }
 
-        bool allEnemiesDead = true;
-        foreach (var enemy in activeEnemies)
-        {
-            if (enemy != null && !enemy.IsDead())
-            {
-                allEnemiesDead = false;
-                break;
-            }
-        }
-
-        if (allEnemiesDead)
+        if (!gameEnded)
         {
             gameEnded = true;
             OnPlayerWin();
@@ -88,11 +95,15 @@ public class GameplayManager : MonoBehaviour
 
     private void OnPlayerWin()
     {
-        Debug.Log("<color=green>[GameplayManager]</color> �El jugador ha ganado!");
+        Debug.Log("<color=green>[GameplayManager]</color> ¡El jugador ha ganado!");
     }
 
     private void OnPlayerLose()
     {
         Debug.Log("<color=red>[GameplayManager]</color> El jugador ha muerto. Has perdido.");
+
+        sceneLoader.UnloadScene("PersistantGameplay");
+        sceneLoader.UnloadScene("Gameplay");
+        sceneLoader.LoadScene("MainMenu", LoadSceneMode.Additive);
     }
 }

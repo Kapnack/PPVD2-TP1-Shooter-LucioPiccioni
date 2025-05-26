@@ -10,22 +10,21 @@ public class AreaEnemy : Enemy
     [SerializeField] private float explodeRange = 1.5f;
     [SerializeField] private float explosionDamage = 200;
     [SerializeField] private GameObject explosionEffect;
+
     private bool hasExploded = false;
-
-    private static int InstanceCount = 0;
-
     private Vector3 initialPosition;
     private float lostPlayerTimer = 0f;
     private bool playerInSight = false;
 
     private Rigidbody rb;
 
-    private void Awake()
+    protected override void Start()
     {
-        InstanceCount++;
-        initialPosition = transform.position;
+        base.Start();
 
         rb = GetComponent<Rigidbody>();
+
+        initialPosition = transform.position;
     }
 
     private void FixedUpdate()
@@ -38,14 +37,13 @@ public class AreaEnemy : Enemy
 
         Vector3 playerPos = iPlayer.getPos();
         float distanceToPlayer = Vector3.Distance(transform.position, playerPos);
-        Debug.Log("Distancia al jugador: " + distanceToPlayer + " / viewDistance: " + viewDistance);
 
         if (distanceToPlayer < viewDistance)
         {
             playerInSight = true;
             lostPlayerTimer = 0f;
 
-            Vector3 dirToPlayer = (playerPos - transform.position);
+            Vector3 dirToPlayer = playerPos - transform.position;
             dirToPlayer.y = 0;
 
             if (dirToPlayer != Vector3.zero)
@@ -82,7 +80,6 @@ public class AreaEnemy : Enemy
         if (!hasExploded && horizontalDistance < explodeRange)
         {
             Explode(playerPos);
-            return;
         }
     }
 
@@ -111,11 +108,12 @@ public class AreaEnemy : Enemy
             iPlayer.ReciveDamage(explosionDamage);
         }
 
-        Destroy(gameObject);
+        DieAndNotify();
     }
 
     protected override void OnDead()
     {
-        Destroy(gameObject);
+        DieAndNotify();
     }
+
 }
