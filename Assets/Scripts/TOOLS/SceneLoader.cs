@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+public class SceneLoader : MonoBehaviour, ISceneLoader
 {
     private void Awake()
     {
-        ServiceProvider.SetService(this, true);
+        ServiceProvider.SetService<ISceneLoader>(this, true);
 
         LoadScene("MainMenu", LoadSceneMode.Additive, false);
     }

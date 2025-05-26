@@ -435,15 +435,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   maxShield: 50
-  cam: {fileID: 0}
-  gunsObj:
-  - {fileID: 7937351561776465345}
-  - {fileID: 7594652972025281517}
+  cam: {fileID: 7154255229429619322}
   weaponGrabPos: {fileID: 3908389025916930689}
   interactableLayer:
     serializedVersion: 2
     m_Bits: 0
+  gunsObj:
+  - {fileID: 7937351561776465345}
+  - {fileID: 7594652972025281517}
   grabDistance: 25
+  viewAngleThreshold: 30
 --- !u!114 &1183014537996170955
 MonoBehaviour:
   m_ObjectHideFlags: 0

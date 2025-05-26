@@ -14,11 +14,11 @@ public class GameplayManager : MonoBehaviour, IGameplayManager
 
     private bool gameEnded = false;
 
-    SceneLoader sceneLoader;
+    ISceneLoader sceneLoader;
 
     private void Awake()
     {
-        if (ServiceProvider.TryGetService<SceneLoader>(out var sceneLoader))
+        if (ServiceProvider.TryGetService<ISceneLoader>(out var sceneLoader))
             this.sceneLoader = sceneLoader;
 
         Enemy.gameplayManager = this;
@@ -96,14 +96,23 @@ public class GameplayManager : MonoBehaviour, IGameplayManager
     private void OnPlayerWin()
     {
         Debug.Log("<color=green>[GameplayManager]</color> ¡El jugador ha ganado!");
+        LoadMainMenu();
     }
 
     private void OnPlayerLose()
     {
         Debug.Log("<color=red>[GameplayManager]</color> El jugador ha muerto. Has perdido.");
 
+        LoadMainMenu();
+    }
+
+    private void LoadMainMenu()
+    {
         sceneLoader.UnloadScene("PersistantGameplay");
         sceneLoader.UnloadScene("Gameplay");
         sceneLoader.LoadScene("MainMenu", LoadSceneMode.Additive);
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 }

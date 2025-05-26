@@ -2,17 +2,22 @@ using UnityEngine;
 
 public class MainMenuManager : MonoBehaviour
 {
-    private SceneLoader sceneLoader;
+    private ISceneLoader sceneLoader;
 
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject credits;
 
     private void Awake()
     {
-        if (ServiceProvider.TryGetService<SceneLoader>(out var sceneLoader))
+        if (ServiceProvider.TryGetService<ISceneLoader>(out var sceneLoader))
             this.sceneLoader = sceneLoader;
 
         credits.SetActive(false);
+    }
+
+    private void Update()
+    {
+        
     }
 
     public void LoadGameplay()

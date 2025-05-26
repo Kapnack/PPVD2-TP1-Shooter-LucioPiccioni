@@ -33,9 +33,9 @@ public class Bullet : MonoBehaviour
 
     public void Fire() => rb.AddForce(transform.forward * fireForce, ForceMode.Impulse);
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.TryGetComponent<Enemy>(out var enemy))
+        if (other.gameObject.TryGetComponent<Enemy>(out var enemy))
         {
             enemy.ReciveDamage(damage);
 

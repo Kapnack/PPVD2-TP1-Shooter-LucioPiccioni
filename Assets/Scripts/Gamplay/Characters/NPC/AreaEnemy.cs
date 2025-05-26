@@ -27,7 +27,7 @@ public class AreaEnemy : Enemy
         initialPosition = transform.position;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (iPlayer == null)
         {

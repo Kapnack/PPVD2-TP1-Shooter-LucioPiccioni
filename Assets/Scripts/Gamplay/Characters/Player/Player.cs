@@ -21,7 +21,7 @@ public class Player : Characters, IPlayer
     [SerializeField] private float grabDistance = 25.0f;
 
     [Header("View Settings")]
-    [SerializeField] private float viewAngleThreshold = 90f;
+    [SerializeField] private float viewAngleThreshold = 30f;
 
     private Gun[] gunsScripts = new Gun[2];
     private InputReader inputReader;
@@ -65,6 +65,8 @@ public class Player : Characters, IPlayer
 
         inputReader.InteractEvent += GrabWeapon;
         inputReader.DropWeaponEvent += DropGun;
+
+        inputReader.MeleeAttackEvent += MeleeAttack;
     }
 
     private void OnDisable()
@@ -79,6 +81,8 @@ public class Player : Characters, IPlayer
 
         inputReader.InteractEvent -= GrabWeapon;
         inputReader.DropWeaponEvent -= DropGun;
+
+        inputReader.MeleeAttackEvent -= MeleeAttack;
     }
 
     private void Update()
@@ -155,9 +159,11 @@ public class Player : Characters, IPlayer
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, grabDistance, interactableLayer))
         {
             Debug.DrawRay(cam.transform.position, cam.transform.forward * grabDistance, Color.red, 1f);
+
             if (hit.transform.TryGetComponent(out Gun gun))
                 return gun;
         }
+
         return null;
     }
 
