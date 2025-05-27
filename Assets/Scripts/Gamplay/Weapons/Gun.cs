@@ -29,7 +29,7 @@ public abstract class Gun : MonoBehaviour
 
     protected Characters owner;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         magazine.Awake();
 
