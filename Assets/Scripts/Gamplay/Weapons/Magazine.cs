@@ -34,6 +34,11 @@ public class Magazine
         get => reloading;
     }
 
+    public void Awake()
+    {
+        currentAmmo = maxAmmo;
+    }
+
     public void ReduceCurrentAmmo() => currentAmmo--;
 
     public void DoneReloading()

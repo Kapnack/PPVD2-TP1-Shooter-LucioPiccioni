@@ -99,7 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   maxShield: 50
-  viewDistance: 55
+  viewDistance: 15
   rotationSpeed: 5
   moveSpeed: 3
   explodeRange: 1.5

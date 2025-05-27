@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class AreaEnemy : Enemy
 {
-    [SerializeField] private float viewDistance = 200f;
+    [SerializeField] private float viewDistance = 100;
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private float moveSpeed = 3f;
 
@@ -27,7 +27,7 @@ public class AreaEnemy : Enemy
         initialPosition = transform.position;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (iPlayer == null)
         {
@@ -116,4 +116,12 @@ public class AreaEnemy : Enemy
         DieAndNotify();
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, explodeRange);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, viewDistance);
+    }
 }
