@@ -95,14 +95,19 @@ public class CheatManager : MonoBehaviour
 
     private void ChangeLevel(InputAction.CallbackContext context)
     {
-        if (gameplayManager != null)
+        if (this.gameplayManager != null)
         {
-            gameplayManager.LoadNextLevel();
+            this.gameplayManager.LoadNextLevel();
             Debug.Log("<color=yellow>[CheatManager]</color> Forced level change.");
         }
         else
         {
             Debug.LogWarning("[CheatManager] GameplayManager not available yet.");
         }
+
+        gameplayManager = null;
+
+        StartCoroutine(WaitForGameplayManager());
     }
 }
+

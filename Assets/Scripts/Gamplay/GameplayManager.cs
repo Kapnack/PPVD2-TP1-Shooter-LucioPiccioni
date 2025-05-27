@@ -118,24 +118,33 @@ public class GameplayManager : MonoBehaviour, IGameplayManager
             Debug.Log("<color=magenta>[GameplayManager]</color> Level completed. Returning to main menu.");
             LoadMainMenu();
         }
+
+        ServiceProvider.RemoveService<IGameplayManager>();
     }
 
     private IEnumerator LoadGameplayCoroutine()
     {
         sceneLoader.UnloadScene("PersistantGameplay");
- 
-        yield return new WaitForSeconds(0.25f);
+
+        if (sceneLoader.IsSceneLoaded("PersistantGameplay"))
+            yield return null;
 
         sceneLoader.LoadScene("PersistantGameplay", LoadSceneMode.Additive);
 
-        yield return new WaitForSeconds(0.25f);
+        if (!sceneLoader.IsSceneLoaded("PersistantGameplay"))
+            yield return null;
 
         sceneLoader.LoadScene("Gameplay", LoadSceneMode.Additive);
 
-        yield return new WaitForSeconds(0.25f);
+        if (!sceneLoader.IsSceneLoaded("Gameplay"))
+            yield return null;
 
         HideCursor();
+
         sceneLoader.UnloadScene("Tutorial");
+
+        if (sceneLoader.IsSceneLoaded("Tutorial"))
+            yield return null;
     }
 
 
