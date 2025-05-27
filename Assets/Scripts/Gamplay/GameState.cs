@@ -6,14 +6,14 @@ public class GameState : MonoBehaviour
     [SerializeField] GameObject pauseMenu;
 
     InputReader inputReader;
-    SceneLoader sceneLoader;
+    ISceneLoader sceneLoader;
 
     private void Awake()
     {
         if (ServiceProvider.TryGetService<InputReader>(out var inputReader))
             this.inputReader = inputReader;
 
-        if (ServiceProvider.TryGetService<SceneLoader>(out var sceneLoader))
+        if (ServiceProvider.TryGetService<ISceneLoader>(out var sceneLoader))
             this.sceneLoader = sceneLoader;
 
         pauseMenu.SetActive(false);
@@ -69,10 +69,11 @@ public class GameState : MonoBehaviour
     {
         Time.timeScale = 1.0f;
 
-        sceneLoader.UnloadScene("Gameplay");
+        ShowCursor();
 
         sceneLoader.LoadScene("MainMenu", LoadSceneMode.Additive, false);
 
+        sceneLoader.UnloadScene("Gameplay");
         sceneLoader.UnloadScene("PersistantGameplay");
     }
 
