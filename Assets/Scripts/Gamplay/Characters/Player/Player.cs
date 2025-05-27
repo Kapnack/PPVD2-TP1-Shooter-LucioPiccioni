@@ -39,6 +39,8 @@ public class Player : Characters, IPlayer
 
     private void Awake()
     {
+        OnAwake();
+
         if (ServiceProvider.TryGetService<InputReader>(out var input))
             inputReader = input;
 

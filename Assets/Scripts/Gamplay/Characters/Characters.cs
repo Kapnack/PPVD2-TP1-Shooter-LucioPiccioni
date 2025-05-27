@@ -22,6 +22,11 @@ public abstract class Characters : MonoBehaviour
         get => _actualShield;
     }
 
+    protected void OnAwake()
+    {
+        _actualHealth = maxHealth;
+        _actualShield = maxShield;
+    }
 
     public virtual void ReciveDamage(float damage)
     {

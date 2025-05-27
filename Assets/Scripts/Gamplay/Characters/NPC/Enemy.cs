@@ -5,6 +5,8 @@ public class Enemy : Characters
 
     protected virtual void Start()
     {
+        OnAwake();
+
         if (ServiceProvider.TryGetService<IPlayer>(out var player))
             iPlayer = player;
     }
