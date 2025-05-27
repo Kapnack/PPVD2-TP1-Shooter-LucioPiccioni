@@ -1404,7 +1404,7 @@ MonoBehaviour:
   - {fileID: 2005277930862465889, guid: c1b711a8313789041817621370918235, type: 3}
   - {fileID: 2005277930862465889, guid: da267539bc3ad264db7d45660c3eba0d, type: 3}
   - {fileID: 2005277930862465889, guid: e988b4762ebc043498628039dba0e661, type: 3}
-  enemiesToSpawn: 5
+  enemiesToSpawn: 8
   spawnPoints:
   - {fileID: 1013288924}
   - {fileID: 124721016}

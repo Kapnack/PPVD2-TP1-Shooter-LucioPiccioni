@@ -18,15 +18,8 @@ public class PlayerHudManager : MonoBehaviour
     private TextMeshProUGUI shieldText;
     private TextMeshProUGUI ammoText;
 
-    private InputReader inputReader;
-
-    private bool shouldUpdateAmmo = false;
-
     protected void Awake()
     {
-        if (ServiceProvider.TryGetService<InputReader>(out var inputReader))
-            this.inputReader = inputReader;
-
         playerScript = player.GetComponent<Player>();
 
         canvas = GetComponent<Canvas>();
@@ -37,41 +30,14 @@ public class PlayerHudManager : MonoBehaviour
         ammoText = ammoCanvas.GetComponent<TextMeshProUGUI>();
     }
 
-    public void OnEnable()
-    {
-        inputReader.ChangeWeapon1Event += UpdateAmmoHud;
-        inputReader.ChangeWeapon2Event += UpdateAmmoHud;
-        inputReader.FireEvent += UpdateAmmoHud;
-        inputReader.HoldigFireEvent += OnHoldingFire;
-        inputReader.StopHoldigFireEvent += OnCanceledHoldingFire;
-
-        inputReader.ReloadEvent += UpdateAmmoHud;
-
-        inputReader.DropWeaponEvent += UpdateAmmoHud;
-        inputReader.InteractEvent += UpdateAmmoHud;
-    }
-
-    public void OnDisable()
-    {
-        inputReader.ChangeWeapon1Event -= UpdateAmmoHud;
-        inputReader.ChangeWeapon2Event -= UpdateAmmoHud;
-        inputReader.FireEvent -= UpdateAmmoHud;
-        inputReader.HoldigFireEvent -= OnHoldingFire;
-        inputReader.StopHoldigFireEvent -= OnCanceledHoldingFire;
-
-        inputReader.ReloadEvent -= UpdateAmmoHud;
-
-        inputReader.DropWeaponEvent -= UpdateAmmoHud;
-        inputReader.InteractEvent -= UpdateAmmoHud;
-    }
-
     private void Update()
     {
-        if (shouldUpdateAmmo)
-            UpdateAmmoHud();
+        UpdateAmmoHud();
 
         UpdateHealthHud();
         UpdateShieldHud();
+
+        UpdateKillsHud();
     }
 
     public void UpdateKillsHud()
@@ -89,22 +55,8 @@ public class PlayerHudManager : MonoBehaviour
         shieldText.text = "ARM: " + playerScript.ActualShield + " / " + playerScript.maxShield;
     }
 
-
-    public void OnHoldingFire() => shouldUpdateAmmo = true;
-    public void OnCanceledHoldingFire() => shouldUpdateAmmo = false;
-
     public void UpdateAmmoHud()
     {
         ammoText.text = playerScript.GetCurrentWeaponAmmo() + " / " + playerScript.GetCurrentWeaponMaxAmmo();
-    }
-
-    private void DisableCanvas()
-    {
-        gameObject.SetActive(false);
-    }
-
-    private void EnableCanvas()
-    {
-        gameObject.SetActive(true);
     }
 }
