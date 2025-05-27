@@ -346,7 +346,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   actionMapName: Cheats
-  playerObj: {fileID: 0}
+  playerObj: {fileID: 1644690804}
 --- !u!4 &407382381
 Transform:
   m_ObjectHideFlags: 0
@@ -1657,7 +1657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9399eafe2f43848a3c03284b7b14d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1644690804}
   killsCanvas: {fileID: 2013431336}
   healthCanvas: {fileID: 1320845709}
   shieldCanvas: {fileID: 1748846546}
@@ -1857,6 +1857,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
+--- !u!1 &1644690804 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7465067483791310642, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
+  m_PrefabInstance: {fileID: 1644690803}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1748846546
 GameObject:
   m_ObjectHideFlags: 0
