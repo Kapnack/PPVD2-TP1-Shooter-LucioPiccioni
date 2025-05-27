@@ -82,7 +82,7 @@ public class CheatManager : MonoBehaviour
 
     private void ToggleFastTime(InputAction.CallbackContext context)
     {
-        Time.timeScale = Time.timeScale == 1f ? 1.5f : 1f;
+        Time.timeScale = Time.timeScale == 1f ? 2f : 1f;
         Debug.Log($"[CheatManager] Time scale set to: {Time.timeScale}");
     }
 

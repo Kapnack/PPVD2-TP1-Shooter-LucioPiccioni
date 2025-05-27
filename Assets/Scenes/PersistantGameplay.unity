@@ -954,50 +954,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 404034032859418718, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: magazine.maxAmmo
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 404034032859418718, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: timeBetweenShots
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 404034032859418718, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: ammo.reloadingTime
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 404034032859418718, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: magazine.reloadingTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 404034032859418718, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: magazine.consumtionRate
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1123003159712471325, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 3775
-      objectReference: {fileID: 0}
-    - target: {fileID: 1183014537996170955, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: jumpForce
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1183014537996170955, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: jumpHoldForce
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1457077970044450219, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: ammo.reloadingTime
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2234660446903648354, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: cam
-      value: 
-      objectReference: {fileID: 1461234421}
-    - target: {fileID: 2234660446903648354, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: interactableLayer.m_Bits
-      value: 2048
-      objectReference: {fileID: 0}
     - target: {fileID: 5666835487551239925, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.58
@@ -1038,65 +994,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6011099297870810607, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6490094994009153021, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: damage
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 6490094994009153021, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: duration
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6490094994009153021, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: maxDistance
-      value: 600
-      objectReference: {fileID: 0}
-    - target: {fileID: 6490094994009153021, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: magazine.maxAmmo
-      value: 22
-      objectReference: {fileID: 0}
-    - target: {fileID: 6490094994009153021, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: timeBetweenShots
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6490094994009153021, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: magazine.reloadingTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6490094994009153021, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: magazine.consumtionRate
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6606963822047266811, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: xSensitivity
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 6606963822047266811, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: ySensitivity
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 7069432255506772567, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7465067483791310642, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 8259944493914498737, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 3775
-      objectReference: {fileID: 0}
-    - target: {fileID: 8259944493914498737, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: m_IncludeLayers.m_Bits
-      value: 320
-      objectReference: {fileID: 0}
-    - target: {fileID: 8398483926792167362, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1701,11 +1601,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1440281450}
   m_CullTransparentMesh: 1
---- !u!20 &1461234421 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 7154255229429619322, guid: 8271f478d37dcd140bb0577d631706f0, type: 3}
-  m_PrefabInstance: {fileID: 1062358213}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1519226994
 GameObject:
   m_ObjectHideFlags: 0

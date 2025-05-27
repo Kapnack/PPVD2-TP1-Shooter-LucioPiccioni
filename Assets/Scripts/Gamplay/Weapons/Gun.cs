@@ -80,7 +80,6 @@ public abstract class Gun : MonoBehaviour
         transform.SetParent(hand);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, 180f));
-        transform.localScale = Vector3.one;
 
         rb.isKinematic = true;
 
