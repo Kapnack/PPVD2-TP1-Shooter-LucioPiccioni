@@ -69,11 +69,11 @@ public class GameState : MonoBehaviour
     {
         Time.timeScale = 1.0f;
 
-        sceneLoader.UnloadScene("PersistantGameplay");
         sceneLoader.UnloadScene("Gameplay");
 
         sceneLoader.LoadScene("MainMenu", LoadSceneMode.Additive, false);
 
+        sceneLoader.UnloadScene("PersistantGameplay");
     }
 
     public void Continue()
