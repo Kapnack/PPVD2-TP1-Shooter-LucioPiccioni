@@ -58,9 +58,11 @@ public class GameState : MonoBehaviour
         }
     }
 
-    public void WantToExit()
+    public void ExitGame()
     {
-        sceneLoader.LoadScene("ConfirmExit", LoadSceneMode.Additive, false);
+#if !DEBUG
+        Application.Quit();
+#endif
     }
 
     public void GoToMenu()
@@ -81,8 +83,6 @@ public class GameState : MonoBehaviour
         pauseMenu.SetActive(false);
 
         HideCursor();
-
-
     }
 
     private void HideCursor()

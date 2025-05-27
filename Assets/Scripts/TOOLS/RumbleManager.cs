@@ -3,10 +3,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.DualShock;
 
-public class RumbleManager : Singleton<RumbleManager>
+public class RumbleManager : MonoBehaviour, IRumbleManager
 {
     private Gamepad pad;
     [SerializeField] readonly float timeBetweenBlinks;
+
+    private void Awake()
+    {
+        ServiceProvider.SetService<IRumbleManager>(this, true);
+    }
 
     public void RumblePulse(float lowFrequency, float highFrequency, float duration)
     {

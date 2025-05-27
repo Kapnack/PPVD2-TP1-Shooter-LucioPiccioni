@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public interface ISceneLoader
 {
+    public bool IsSceneLoaded(string name);
+    public bool IsSceneLoaded(int index);
     public void LoadScene(int index, LoadSceneMode mode, bool Async = false);
     public void LoadScene(int[] scenes, LoadSceneMode mode, bool Async = false);
     public void LoadScene(string scene, LoadSceneMode mode, bool Async = false);

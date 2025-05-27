@@ -110,7 +110,7 @@ public class SceneLoader : MonoBehaviour, ISceneLoader
             UnloadScene(scenes[i]);
     }
 
-    private bool IsSceneLoaded(string sceneName)
+    public bool IsSceneLoaded(string sceneName)
     {
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {
@@ -123,7 +123,7 @@ public class SceneLoader : MonoBehaviour, ISceneLoader
         return false;
     }
 
-    private bool IsSceneLoaded(int index)
+    public bool IsSceneLoaded(int index)
     {
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ProjectileGun : Gun
 {
@@ -10,6 +11,8 @@ public class ProjectileGun : Gun
     {
         var newBullet = Instantiate(bulletPrefab, tip.transform.position, tip.transform.rotation);
 
+        SceneManager.MoveGameObjectToScene(newBullet, gameObject.scene);
+
         Bullet bulletScrip = newBullet.GetComponent<Bullet>();
 
         bulletScrip.SetUpDamage(damage);
@@ -18,6 +21,7 @@ public class ProjectileGun : Gun
 
         magazine.ReduceCurrentAmmo();
 
-        RumbleManager.Instance.RumblePulse(lowFrequency, highFrequency, duration);
+        if (rumbleManager != null)
+            rumbleManager.RumblePulse(lowFrequency, highFrequency, duration);
     }
 }

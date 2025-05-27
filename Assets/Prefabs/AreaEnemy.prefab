@@ -103,7 +103,7 @@ MonoBehaviour:
   rotationSpeed: 5
   moveSpeed: 3
   explodeRange: 1.5
-  explosionDamage: 200
+  explosionDamage: 100
   explosionEffect: {fileID: 0}
 --- !u!1001 &5467819335690868419
 PrefabInstance:

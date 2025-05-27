@@ -10,20 +10,20 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpHoldForce = 5.0f;
 
     [Header("Movement")]
-    [SerializeField] float speed = 10;
+    [SerializeField] private float maxSpeed = 10f;
+    [SerializeField] private float acceleration = 20f;
+    [SerializeField] private float deceleration = 40f;
 
     private Rigidbody rb;
-
     private InputReader inputReader;
 
     private bool isJumpRequested;
     private bool isHoldingJump;
     private int consecutiveJumps = 0;
-
     private float jumpHoldTimer = 0;
 
-    private Vector3 transformInput;
     private Vector3 moveInput;
+    private Vector3 currentVelocity;
 
     private void Awake()
     {
@@ -36,17 +36,14 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         inputReader.MoveEvent += OnMove;
-
         inputReader.JumpEvent += OnJump;
         inputReader.JumpHoldEvent += OnJumpHold;
         inputReader.JumpReleaseEvent += OnJumpRelease;
     }
 
-
     private void OnDisable()
     {
         inputReader.MoveEvent -= OnMove;
-
         inputReader.JumpEvent -= OnJump;
         inputReader.JumpHoldEvent -= OnJumpHold;
         inputReader.JumpReleaseEvent -= OnJumpRelease;
@@ -54,9 +51,28 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transformInput = rb.transform.TransformDirection(moveInput.normalized) * speed;
+        // Movimiento con aceleraci�n y freno suave
+        Vector3 targetVelocity = transform.TransformDirection(moveInput.normalized) * maxSpeed;
+        Vector3 velocityChange = Vector3.zero;
 
-        rb.AddForce(transformInput, ForceMode.Force);
+        if (moveInput.magnitude > 0.1f)
+        {
+            velocityChange = Vector3.MoveTowards(
+                new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z),
+                new Vector3(targetVelocity.x, 0, targetVelocity.z),
+                acceleration * Time.fixedDeltaTime
+            );
+        }
+        else
+        {
+            velocityChange = Vector3.MoveTowards(
+                new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z),
+                Vector3.zero,
+                deceleration * Time.fixedDeltaTime
+            );
+        }
+
+        rb.linearVelocity = new Vector3(velocityChange.x, rb.linearVelocity.y, velocityChange.z);
 
         if (isJumpRequested)
         {
@@ -65,8 +81,9 @@ public class PlayerMovement : MonoBehaviour
 
             if (consecutiveJumps < maxJumps)
             {
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
                 rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-                consecutiveJumps++;
+                consecutiveJumps++; 
             }
         }
 
@@ -75,7 +92,6 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(Vector3.up * jumpHoldForce, ForceMode.Force);
             jumpHoldTimer += Time.fixedDeltaTime;
         }
-
     }
 
     private void OnMove(Vector2 direction)
@@ -95,7 +111,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJumpRelease()
     {
-        isHoldingJump = true;
+        isHoldingJump = false;
     }
 
     private void OnCollisionEnter(Collision collision)

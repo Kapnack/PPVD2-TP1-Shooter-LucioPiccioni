@@ -2,6 +2,7 @@ using UnityEngine;
 
 public interface IGameplayManager
 {
-    void NotifyEnemyDeath(Characters enemy);
-    void NotifyPlayerDeath();
+    public void NotifyEnemyDeath(Characters enemy);
+    public void NotifyPlayerDeath();
+    public void LoadNextLevel();
 }

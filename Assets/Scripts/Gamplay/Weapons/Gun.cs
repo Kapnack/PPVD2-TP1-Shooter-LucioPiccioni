@@ -19,6 +19,8 @@ public abstract class Gun : MonoBehaviour
     private Rigidbody rb;
     private BoxCollider collitionBox;
 
+    static protected IRumbleManager rumbleManager;
+
     static private float dropForwardForce = 5;
     static private float dropUpwardForce = 3;
 
@@ -29,6 +31,8 @@ public abstract class Gun : MonoBehaviour
 
     private void Awake()
     {
+        ServiceProvider.TryGetService<IRumbleManager>(out rumbleManager);
+
         rb = GetComponent<Rigidbody>();
 
         collitionBox = GetComponent<BoxCollider>();

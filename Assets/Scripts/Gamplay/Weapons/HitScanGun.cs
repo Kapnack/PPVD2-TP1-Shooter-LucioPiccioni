@@ -22,7 +22,8 @@ public class HitScanGun : Gun
 
         magazine.ReduceCurrentAmmo();
 
-        RumbleManager.Instance.RumblePulse(lowFrequency, highFrequency, duration);
+        if (rumbleManager != null)
+            rumbleManager.RumblePulse(lowFrequency, highFrequency, duration);
 
     }
 }

@@ -19,6 +19,7 @@ public class Player : Characters, IPlayer
     [Header("Weapon Settings")]
     [SerializeField] private GameObject[] gunsObj = new GameObject[2];
     [SerializeField] private float grabDistance = 25.0f;
+    [SerializeField] float grabSphereRadius = 1.25f;
 
     [Header("View Settings")]
     [SerializeField] private float viewAngleThreshold = 30f;
@@ -28,6 +29,8 @@ public class Player : Characters, IPlayer
 
     private Slots currentSlot;
     private bool isHoldingFire = false;
+
+    private bool isInmortal = false;
 
     private int kills = 0;
     public int Kills => kills;
@@ -156,9 +159,13 @@ public class Player : Characters, IPlayer
 
     private Gun FindBestInteractable()
     {
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, grabDistance, interactableLayer))
+        Vector3 origin = cam.transform.position;
+        Vector3 direction = cam.transform.forward;
+
+        if (Physics.SphereCast(origin, grabSphereRadius, direction, out RaycastHit hit, grabDistance, interactableLayer))
         {
-            Debug.DrawRay(cam.transform.position, cam.transform.forward * grabDistance, Color.red, 1f);
+            Debug.DrawRay(origin, direction * hit.distance, Color.yellow, 1f);
+            Debug.DrawRay(hit.point, Vector3.up * 0.5f, Color.red, 1f);
 
             if (hit.transform.TryGetComponent(out Gun gun))
                 return gun;
@@ -202,6 +209,8 @@ public class Player : Characters, IPlayer
 
     public override void ReciveDamage(float damage)
     {
+        if (isInmortal) return;
+
         base.ReciveDamage(damage);
     }
 
@@ -224,5 +233,10 @@ public class Player : Characters, IPlayer
     public float GetCurrentWeaponMaxAmmo()
     {
         return gunsScripts[(int)currentSlot]?.magazine.MaxAmmo ?? 0f;
+    }
+
+    public void ChangeInmortalState()
+    {
+        isInmortal = !isInmortal;
     }
 }

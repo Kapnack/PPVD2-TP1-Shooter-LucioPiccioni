@@ -8,4 +8,5 @@ public interface IPlayer
     Vector3 getPos();
     bool IsLookingAt(Vector3 position);
     void ReciveDamage(float amount);
+    void ChangeInmortalState();
 }
