@@ -51,28 +51,26 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Movimiento con aceleraci�n y freno suave
         Vector3 targetVelocity = transform.TransformDirection(moveInput.normalized) * maxSpeed;
-        Vector3 velocityChange = Vector3.zero;
+        Vector3 currentHorizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+        Vector3 velocityDifference = targetVelocity - currentHorizontalVelocity;
 
+
+        Vector3 force = Vector3.zero;
         if (moveInput.magnitude > 0.1f)
         {
-            velocityChange = Vector3.MoveTowards(
-                new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z),
-                new Vector3(targetVelocity.x, 0, targetVelocity.z),
-                acceleration * Time.fixedDeltaTime
-            );
+            force = Vector3.ClampMagnitude(velocityDifference * acceleration, acceleration);
         }
         else
         {
-            velocityChange = Vector3.MoveTowards(
-                new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z),
-                Vector3.zero,
-                deceleration * Time.fixedDeltaTime
-            );
+            force = -currentHorizontalVelocity.normalized * deceleration;
+            if (currentHorizontalVelocity.magnitude < 0.1f)
+            {
+                force = -currentHorizontalVelocity * deceleration;
+            }
         }
 
-        rb.linearVelocity = new Vector3(velocityChange.x, rb.linearVelocity.y, velocityChange.z);
+        rb.AddForce(force, ForceMode.Force);
 
         if (isJumpRequested)
         {
