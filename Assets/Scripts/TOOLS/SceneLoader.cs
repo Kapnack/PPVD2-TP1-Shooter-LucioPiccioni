@@ -1,9 +1,25 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using System;
 
 public class SceneLoader : MonoBehaviour, ISceneLoader
 {
+    private struct SceneData
+    {
+        Scene scene;
+        bool isPersistant;
+
+        public SceneData(Scene scene, bool isPersistant = false)
+        {
+            this.scene = scene;
+            this.isPersistant = isPersistant;
+        }
+    }
+
+
+    List<SceneData> activeScenes;
+
     private void Awake()
     {
         ServiceProvider.SetService<ISceneLoader>(this, true);
@@ -22,6 +38,8 @@ public class SceneLoader : MonoBehaviour, ISceneLoader
                 SceneManager.LoadSceneAsync(index, mode);
             else
                 SceneManager.LoadScene(index, mode);
+
+            activeScenes.Add(new SceneData(SceneManager.GetSceneAt(index)));
         }
         else
         {
@@ -52,6 +70,8 @@ public class SceneLoader : MonoBehaviour, ISceneLoader
                 SceneManager.LoadSceneAsync(scene, mode);
             else
                 SceneManager.LoadScene(scene, mode);
+
+            activeScenes.Add(new SceneData(SceneManager.GetSceneByName(scene), ));
         }
         else
         {

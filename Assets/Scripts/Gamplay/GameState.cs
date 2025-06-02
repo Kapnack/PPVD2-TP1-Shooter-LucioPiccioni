@@ -29,7 +29,7 @@ public class GameState : MonoBehaviour
     {
         inputReader.PauseEvent += OnPause;
 
-       ShowCursor();
+        ShowCursor();
     }
 
     private void OnDisable()
@@ -73,7 +73,11 @@ public class GameState : MonoBehaviour
 
         sceneLoader.LoadScene("MainMenu", LoadSceneMode.Additive, false);
 
-        sceneLoader.UnloadScene("Gameplay");
+        if (sceneLoader.IsSceneLoaded("Gameplay"))
+            sceneLoader.UnloadScene("Gameplay");
+        else
+            sceneLoader.UnloadScene("Tutorial");
+
         sceneLoader.UnloadScene("PersistantGameplay");
     }
 

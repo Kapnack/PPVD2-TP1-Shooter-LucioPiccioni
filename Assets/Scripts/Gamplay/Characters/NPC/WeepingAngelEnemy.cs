@@ -4,7 +4,7 @@ public class WeepingAngelEnemy : Enemy
 {
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float rotationSpeed = 5f;
-    [SerializeField] private float explodeRange = 1.5f;
+    [SerializeField] private float explodeRange = 3f;
     [SerializeField] private float explosionDamage = 200;
     [SerializeField] private GameObject explosionEffect;
 
@@ -39,9 +39,9 @@ public class WeepingAngelEnemy : Enemy
             }
         }
 
-        float horizontalDistance = Vector2.Distance(
-            new Vector2(transform.position.x, transform.position.z),
-            new Vector2(playerPos.x, playerPos.z)
+        float horizontalDistance = Vector3.Distance(
+            transform.position,
+            playerPos
         );
 
         if (!hasExploded && horizontalDistance < explodeRange)

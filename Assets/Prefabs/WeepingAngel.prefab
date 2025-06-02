@@ -101,7 +101,7 @@ MonoBehaviour:
   maxShield: 50
   moveSpeed: 3
   rotationSpeed: 5
-  explodeRange: 1.5
+  explodeRange: 3
   explosionDamage: 200
   explosionEffect: {fileID: 0}
 --- !u!1001 &5467819335690868419

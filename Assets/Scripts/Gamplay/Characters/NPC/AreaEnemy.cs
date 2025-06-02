@@ -73,9 +73,9 @@ public class AreaEnemy : Enemy
         }
 
         float horizontalDistance = Vector2.Distance(
-            new Vector2(transform.position.x, transform.position.z),
-            new Vector2(playerPos.x, playerPos.z)
-        );
+                   transform.position,
+                   playerPos
+               );
 
         if (!hasExploded && horizontalDistance < explodeRange)
         {
@@ -104,7 +104,7 @@ public class AreaEnemy : Enemy
         float dist = Vector3.Distance(transform.position, playerPos);
         if (dist < explodeRange)
         {
-            Debug.Log("<color=red><b>[Enemy]</b> ¡BOOM! Daño al jugador</color>");
+            Debug.Log("<color=red><b>[AreaEnemy]</b> ¡BOOM! Daño al jugador</color>");
             iPlayer.ReciveDamage(explosionDamage);
         }
 
