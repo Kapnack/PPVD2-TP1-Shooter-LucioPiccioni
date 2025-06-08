@@ -3,76 +3,69 @@ using UnityEngine.InputSystem;
 
 public class MainMenuManager : MonoBehaviour
 {
-    private ISceneLoader sceneLoader;
+    private IGameManager gameManager;
 
+    [Header("Canvas")]
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject credits;
 
-    [SerializeField] private InputActionReference actionRef;
+    [Header("ESC Action")]
+    [SerializeField] private @InputSystem_Actions action;
 
-    private bool isCredits = false;
+    [Header("Botón de Jugar")]
+    [SerializeField] private GameObject playButton;
 
     private void Awake()
     {
-        if (ServiceProvider.TryGetService<ISceneLoader>(out var loader))
-            sceneLoader = loader;
+        if (ServiceProvider.TryGetService<IGameManager>(out var gameManager))
+            this.gameManager = gameManager;
 
         credits.SetActive(false);
-    }
 
-    private void OnEnable()
-    {
-        if (actionRef != null && actionRef.action != null)
-            actionRef.action.performed += OnCreditsInput;
-    }
-
-    private void OnDisable()
-    {
-        if (actionRef != null && actionRef.action != null)
-            actionRef.action.performed -= OnCreditsInput;
+        if (gameManager.CurrentLevelIndex > 0 && playButton != null)
+            playButton.SetActive(true);
+        else if (playButton != null)
+            playButton.SetActive(false);
     }
 
     public void LoadGameplay()
     {
-        sceneLoader.UnloadScene("MainMenu");
-        sceneLoader.LoadScene("Gameplay", UnityEngine.SceneManagement.LoadSceneMode.Additive, false);
+        if (gameManager.CurrentLevelIndex != 0)
+            gameManager.LoadCurrentLevel();
     }
 
     public void LoadTutorial()
     {
-        sceneLoader.UnloadScene("MainMenu");
-        sceneLoader.LoadScene("Tutorial", UnityEngine.SceneManagement.LoadSceneMode.Additive, false);
+        gameManager.LoadTutorial();
     }
 
     public void LoadCredits()
     {
         mainMenu.SetActive(false);
         credits.SetActive(true);
-        isCredits = true;
 
-        if (actionRef != null && actionRef.action != null)
-            actionRef.action.Enable();
+        if (action != null)
+            action.UI.Confirm.started += OnCreditsInput;
     }
 
     public void GoToMainMenu()
     {
         credits.SetActive(false);
         mainMenu.SetActive(true);
-        isCredits = false;
+
+        if (action != null)
+            action.UI.Confirm.started -= OnCreditsInput;
     }
 
     public void ExitGame()
     {
-#if !DEBUG
+#if !UNITY_EDITOR
         Application.Quit();
 #endif
     }
 
     private void OnCreditsInput(InputAction.CallbackContext ctx)
     {
-        if (isCredits)
-        {
-            GoToMainMenu();
-        }
+        GoToMainMenu();
     }
 }

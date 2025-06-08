@@ -1,174 +1,154 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
-using System;
+using System.Collections;
 
 public class SceneLoader : MonoBehaviour, ISceneLoader
 {
-    private struct SceneData
-    {
-        Scene scene;
-        bool isPersistant;
+#if UNITY_EDITOR
+    [SerializeField] private SceneRef exclude = null;
+#endif
 
-        public SceneData(Scene scene, bool isPersistant = false)
-        {
-            this.scene = scene;
-            this.isPersistant = isPersistant;
-        }
-    }
-
-
-    List<SceneData> activeScenes;
+    private List<Scene> activeScenes = new List<Scene>();
 
     private void Awake()
     {
-        ServiceProvider.SetService<ISceneLoader>(this, true);
-
-        LoadScene("MainMenu", LoadSceneMode.Additive, false);
+        ServiceProvider.SetService<ISceneLoader>(this);
     }
 
-    public void LoadScene(int index, LoadSceneMode mode, bool Async = false)
+#if UNITY_EDITOR
+    private IEnumerator Start()
     {
-        if (IsPlayableScene(index) && !IsSceneLoaded(2))
-            SceneManager.LoadScene(2, LoadSceneMode.Single);
+        if (SceneManager.sceneCount == 0)
+            yield return null;
 
-        if (!IsSceneLoaded(index))
+        CheckAndAddActiveScenesInEditor();
+    }
+#endif
+
+    private IEnumerator LoadSceneCoroutine(SceneRef sceneRef, LoadSceneMode mode)
+    {
+        AsyncOperation asyncOp = SceneManager.LoadSceneAsync(sceneRef.Index, mode);
+
+        while (!asyncOp.isDone)
+            yield return null;
+
+        Scene loadedScene = SceneManager.GetSceneByBuildIndex(sceneRef.Index);
+
+        if (loadedScene.IsValid() && loadedScene.isLoaded)
         {
-            if (Async)
-                SceneManager.LoadSceneAsync(index, mode);
-            else
-                SceneManager.LoadScene(index, mode);
-
-            activeScenes.Add(new SceneData(SceneManager.GetSceneAt(index)));
+            activeScenes.Add(loadedScene);
         }
         else
         {
-            Scene expectedScene = SceneManager.GetSceneAt(index);
-
-            if (expectedScene != null)
-                Debug.LogWarning($"Scene: {expectedScene.name} ({expectedScene.buildIndex}) IS loaded.");
-            else
-                Debug.LogError($"Scene: {index} Doesn't Exist.");
-
+            Debug.LogWarning($"The Scene with name {sceneRef.Name} didn't load correctly.");
         }
     }
 
-    public void LoadScene(int[] scenes, LoadSceneMode mode, bool Async = false)
+    private IEnumerator UnLoadSceneCoroutine(Scene activeScenes)
     {
-        for (int i = 0; i < scenes.Length; i++)
-            LoadScene(scenes[i], mode, Async);
+        AsyncOperation asyncOp = SceneManager.UnloadSceneAsync(activeScenes);
+
+        while (!asyncOp.isDone)
+            yield return null;
     }
 
-    public void LoadScene(string scene, LoadSceneMode mode, bool Async = false)
+    public void LoadScene(SceneRef sceneRef, LoadSceneMode mode = LoadSceneMode.Additive)
     {
-        if (IsPlayableScene(scene) && !IsSceneLoaded("PersistantGameplay"))
-            SceneManager.LoadScene("PersistantGameplay", LoadSceneMode.Additive);
-
-        if (!IsSceneLoaded(scene))
+        if (sceneRef == null)
         {
-            if (Async)
-                SceneManager.LoadSceneAsync(scene, mode);
-            else
-                SceneManager.LoadScene(scene, mode);
-
-            activeScenes.Add(new SceneData(SceneManager.GetSceneByName(scene), ));
+            Debug.LogWarning("No SceneRef asigned");
+            return;
         }
-        else
+        else if (IsSceneLoaded(sceneRef))
         {
-            Scene expectedScene = SceneManager.GetSceneByName(scene);
-
-            if (expectedScene != null)
-                Debug.LogWarning($"Scene: {scene} ({expectedScene.buildIndex}) IS loaded.");
-            else
-                Debug.LogError($"Scene: {scene} Doesn't Exist.");
+            Debug.LogWarning($"Scene is already loaded.");
+            return;
         }
+        else if (sceneRef.Index < 0)
+        {
+            Debug.LogWarning($"Not Valid SceneRef. Cause SceneIndex: {sceneRef.Index} is < 0");
+            return;
+        }
+
+        StartCoroutine(LoadSceneCoroutine(sceneRef, mode));
     }
 
-    public void LoadScene(string[] scenes, LoadSceneMode mode, bool Async = false)
+    public void LoadSceneAsync(SceneRef[] sceneRef, LoadSceneMode mode = LoadSceneMode.Additive)
     {
-        for (int i = 0; i < scenes.Length; i++)
-            LoadScene(scenes, mode, Async);
+        for (int i = 0; i < sceneRef.Length; i++)
+            LoadScene(sceneRef[i], mode);
     }
 
-    public void UnloadScene(int index)
+    public void UnloadAll()
     {
-        if (IsSceneLoaded(index))
+        for (int i = activeScenes.Count - 1; i >= 0; i--)
         {
-            SceneManager.UnloadSceneAsync(index);
+            StartCoroutine(UnLoadSceneCoroutine(activeScenes[i]));
+            activeScenes.RemoveAt(i);
         }
-        else
-        {
-            Scene expectedScene = SceneManager.GetSceneAt(index);
 
-            Debug.LogWarning($"Scene: {expectedScene.name} ({expectedScene.buildIndex}) INS'T loaded.");
-        }
     }
-
-    public void UnloadScene(int[] scenes)
+    public void UnloadAll(SceneRef exeption)
     {
-        for (int i = 0; i < scenes.Length; i++)
-            UnloadScene(scenes[i]);
-    }
-
-    public void UnloadScene(string scene)
-    {
-        if (IsSceneLoaded(scene))
+        for (int i = activeScenes.Count - 1; i >= 0; i--)
         {
-            SceneManager.UnloadSceneAsync(scene);
-        }
-        else
-        {
-            Scene expectedScene = SceneManager.GetSceneByName(scene);
-
-            Debug.LogWarning($"Scene: {name} ({expectedScene.buildIndex}) isn't loaded.");
+            if (activeScenes[i].buildIndex != exeption.Index)
+            {
+                StartCoroutine(UnLoadSceneCoroutine(activeScenes[i]));
+                activeScenes.RemoveAt(i);
+            }
         }
     }
 
-    public void UnloadScene(string[] scenes)
+    public void UnloadAll(SceneRef[] exeptions)
     {
-        for (int i = 0; i < scenes.Length; i++)
-            UnloadScene(scenes[i]);
+        for (int i = activeScenes.Count - 1; i >= 0; i--)
+        {
+            if (IsSceneInRefArray(activeScenes[i].buildIndex, exeptions))
+            {
+                StartCoroutine(UnLoadSceneCoroutine(activeScenes[i]));
+
+                activeScenes.RemoveAt(i);
+            }
+        }
     }
 
-    public bool IsSceneLoaded(string sceneName)
+    private bool IsSceneInRefArray(int index, SceneRef[] sceneRefs)
     {
-        for (int i = 0; i < SceneManager.sceneCount; i++)
+        for (int i = 0; i < sceneRefs.Length; i++)
         {
-            Scene scene = SceneManager.GetSceneAt(i);
-
-            if (scene.name == sceneName)
+            if (index == sceneRefs[i].Index)
                 return true;
         }
 
         return false;
     }
 
-    public bool IsSceneLoaded(int index)
+    public bool IsSceneLoaded(SceneRef sceneRef)
     {
-        for (int i = 0; i < SceneManager.sceneCount; i++)
+        for (int i = 0; i < activeScenes.Count; i++)
         {
-            Scene scene = SceneManager.GetSceneAt(i);
-
-            if (scene.buildIndex == index)
+            if (activeScenes[i].buildIndex == sceneRef.Index)
                 return true;
         }
 
         return false;
     }
 
-    private bool IsPlayableScene(string scene)
+#if UNITY_EDITOR
+    public void CheckAndAddActiveScenesInEditor()
     {
-        if (scene == "Gameplay" || scene == "Tutorial")
-            return true;
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
 
-        return false;
+            if (scene.buildIndex != exclude.Index)
+            {
+                activeScenes.Add(scene);
+            }
+
+        }
     }
-
-    private bool IsPlayableScene(int scene)
-    {
-        if (scene == 4 || scene == 5)
-            return true;
-
-        return false;
-    }
+#endif
 }

@@ -3,29 +3,39 @@ using UnityEngine;
 public abstract class Characters : MonoBehaviour
 {
     [Header("Life")]
-    [SerializeField] public int maxHealth = 100;
+    [SerializeField] public int _maxHealth = 100;
     private float _actualHealth;
 
     [Header("Shield")]
-    [SerializeField] public int maxShield = 50;
+    [SerializeField] public int _maxShield = 50;
     private float _actualShield;
 
     public float ActualHealth
     {
-        set => _actualHealth = Mathf.Clamp(value, 0, maxHealth);
+        set => _actualHealth = Mathf.Clamp(value, 0, _maxHealth);
         get => _actualHealth;
     }
 
     public float ActualShield
     {
-        set => _actualShield = Mathf.Clamp(value, 0, maxShield);
+        set => _actualShield = Mathf.Clamp(value, 0, _maxShield);
         get => _actualShield;
+    }
+
+    public float MaxHealth
+    {
+        get => _maxHealth;
+    }
+
+    public float MaxShield
+    {
+        get => _maxShield;
     }
 
     protected void OnAwake()
     {
-        _actualHealth = maxHealth;
-        _actualShield = maxShield;
+        _actualHealth = _maxHealth;
+        _actualShield = _maxShield;
     }
 
     public virtual void ReciveDamage(float damage)
@@ -46,7 +56,7 @@ public abstract class Characters : MonoBehaviour
             ActualHealth -= damage;
         }
 
-        if(IsDead())
+        if (IsDead())
             OnDead();
     }
 
@@ -56,8 +66,8 @@ public abstract class Characters : MonoBehaviour
 
     public void OnValidate()
     {
-        ActualHealth = maxHealth;
+        ActualHealth = _maxHealth;
 
-        ActualShield = maxShield;
+        ActualShield = _maxShield;
     }
 }

@@ -32,10 +32,15 @@ public class Player : Characters, IPlayer
 
     private bool isInmortal = false;
 
-    private int kills = 0;
-    public int Kills => kills;
+    private int _kills = 0;
+    public int Kills
+    {
+        get => _kills;
+    }
 
-    public Action<float> TakeDamage => ReciveDamage;
+    public event Action OnAmmoChange;
+    public event Action OnKill;
+    public event Action OnHealthChange;
 
     private void Awake()
     {
@@ -137,6 +142,8 @@ public class Player : Characters, IPlayer
             gunsObj[index].SetActive(true);
 
         currentSlot = (Slots)index;
+
+        OnAmmoChange?.Invoke();
     }
 
     private void DropGun()
@@ -144,6 +151,8 @@ public class Player : Characters, IPlayer
         gunsScripts[(int)currentSlot]?.Drop();
         gunsScripts[(int)currentSlot] = null;
         gunsObj[(int)currentSlot] = null;
+
+        OnAmmoChange?.Invoke();
     }
 
     private void GrabWeapon()
@@ -157,6 +166,8 @@ public class Player : Characters, IPlayer
             gunsScripts[(int)currentSlot] = gun;
             gunsObj[(int)currentSlot] = gun.gameObject;
         }
+
+        OnAmmoChange?.Invoke();
     }
 
     private Gun FindBestInteractable()
@@ -214,9 +225,15 @@ public class Player : Characters, IPlayer
         if (isInmortal) return;
 
         base.ReciveDamage(damage);
+
+        OnHealthChange?.Invoke();
     }
 
-    public void AddKill() => kills++;
+    public void AddKill()
+    {
+        _kills++;
+        OnKill?.Invoke();
+    }
 
     public Vector3 getPos() => transform.position;
 

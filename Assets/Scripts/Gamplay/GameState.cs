@@ -1,35 +1,28 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameState : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
 
     InputReader inputReader;
-    ISceneLoader sceneLoader;
+    IGameManager iGameManager;
 
     private void Awake()
     {
         if (ServiceProvider.TryGetService<InputReader>(out var inputReader))
             this.inputReader = inputReader;
 
-        if (ServiceProvider.TryGetService<ISceneLoader>(out var sceneLoader))
-            this.sceneLoader = sceneLoader;
+        if (ServiceProvider.TryGetService<IGameManager>(out var iGameManager))
+            this.iGameManager = iGameManager;
 
         pauseMenu.SetActive(false);
 
-    }
-
-    private void Start()
-    {
-        HideCursor();
+        iGameManager.HideCursor();
     }
 
     private void OnEnable()
     {
         inputReader.PauseEvent += OnPause;
-
-        ShowCursor();
     }
 
     private void OnDisable()
@@ -43,7 +36,7 @@ public class GameState : MonoBehaviour
         {
             pauseMenu.SetActive(true);
 
-            ShowCursor();
+            iGameManager.ShowCursor();
 
             Time.timeScale = 0.0f;
         }
@@ -53,7 +46,7 @@ public class GameState : MonoBehaviour
 
             pauseMenu.SetActive(false);
 
-            HideCursor();
+            iGameManager.HideCursor();
 
         }
     }
@@ -69,16 +62,7 @@ public class GameState : MonoBehaviour
     {
         Time.timeScale = 1.0f;
 
-        ShowCursor();
-
-        sceneLoader.LoadScene("MainMenu", LoadSceneMode.Additive, false);
-
-        if (sceneLoader.IsSceneLoaded("Gameplay"))
-            sceneLoader.UnloadScene("Gameplay");
-        else
-            sceneLoader.UnloadScene("Tutorial");
-
-        sceneLoader.UnloadScene("PersistantGameplay");
+        iGameManager.LoadMainMenu();
     }
 
     public void Continue()
@@ -87,18 +71,6 @@ public class GameState : MonoBehaviour
 
         pauseMenu.SetActive(false);
 
-        HideCursor();
-    }
-
-    private void HideCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
-    private void ShowCursor()
-    {
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
+        iGameManager.HideCursor();
     }
 }

@@ -1657,7 +1657,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9399eafe2f43848a3c03284b7b14d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1644690804}
   killsCanvas: {fileID: 2013431336}
   healthCanvas: {fileID: 1320845709}
   shieldCanvas: {fileID: 1748846546}
@@ -2150,5 +2149,5 @@ SceneRoots:
   - {fileID: 1519226998}
   - {fileID: 909742757}
   - {fileID: 520979502}
-  - {fileID: 1420701466}
   - {fileID: 407382381}
+  - {fileID: 1420701466}

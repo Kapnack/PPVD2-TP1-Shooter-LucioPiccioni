@@ -2407,7 +2407,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenu: {fileID: 2050300562}
   credits: {fileID: 1748802931}
-  actionRef: {fileID: -1815053737902179682, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  playButton: {fileID: 2021541719}
 --- !u!4 &2097783513
 Transform:
   m_ObjectHideFlags: 0

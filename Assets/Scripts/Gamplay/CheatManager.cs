@@ -15,7 +15,7 @@ public class CheatManager : MonoBehaviour
     [SerializeField] private GameObject playerObj;
 
     private IPlayer iPlayer;
-    private IGameplayManager gameplayManager;
+    private IGameplayManager iGameplayManager;
 
     private void Awake()
     {
@@ -68,11 +68,11 @@ public class CheatManager : MonoBehaviour
 
     private IEnumerator WaitForGameplayManager()
     {
-        while (gameplayManager == null)
+        while (iGameplayManager == null)
         {
-            if (ServiceProvider.TryGetService<IGameplayManager>(out var gm))
+            if (ServiceProvider.TryGetService<IGameplayManager>(out var iGameplayManager))
             {
-                gameplayManager = gm;
+                this.iGameplayManager = iGameplayManager;
                 Debug.Log("<color=cyan>[CheatManager]</color> GameplayManager found.");
             }
 
@@ -95,9 +95,9 @@ public class CheatManager : MonoBehaviour
 
     private void ChangeLevel(InputAction.CallbackContext context)
     {
-        if (this.gameplayManager != null)
+        if (this.iGameplayManager != null)
         {
-            this.gameplayManager.LoadNextLevel();
+            this.iGameplayManager.LoadNextLevel();
             Debug.Log("<color=yellow>[CheatManager]</color> Forced level change.");
         }
         else
@@ -105,7 +105,7 @@ public class CheatManager : MonoBehaviour
             Debug.LogWarning("[CheatManager] GameplayManager not available yet.");
         }
 
-        gameplayManager = null;
+        iGameplayManager = null;
 
         StartCoroutine(WaitForGameplayManager());
     }

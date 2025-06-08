@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameplayManager : MonoBehaviour, IGameplayManager
 {
-    [Header("TutorialSetting")]
-    [SerializeField] private bool isTutorial = false;
+    [Header("Next Level")]
+    [SerializeField] SceneRef nextLevel;
 
     [Header("Enemy Settings")]
     [SerializeField] private GameObject[] enemyPrefabs;
@@ -15,19 +14,18 @@ public class GameplayManager : MonoBehaviour, IGameplayManager
 
     [SerializeField] private List<Transform> spawnPoints = new List<Transform>();
 
-
     private List<Characters> activeEnemies = new List<Characters>();
     private bool gameEnded = false;
 
-    private ISceneLoader sceneLoader;
+    private IGameManager iGameManager;
     private int spawnPointIndex;
 
     private void Awake()
     {
         ServiceProvider.SetService<IGameplayManager>(this, true);
 
-        if (ServiceProvider.TryGetService<ISceneLoader>(out var loader))
-            sceneLoader = loader;
+        if (ServiceProvider.TryGetService<IGameManager>(out var iGameManager))
+            this.iGameManager = iGameManager;
 
         Enemy.gameplayManager = this;
         Player.gameplayManager = this;
@@ -103,73 +101,14 @@ public class GameplayManager : MonoBehaviour, IGameplayManager
     private void OnPlayerLose()
     {
         Debug.Log("<color=red>[GameplayManager]</color> Player is dead. You lost.");
-        LoadMainMenu();
     }
 
     public void LoadNextLevel()
     {
-        if (isTutorial)
-        {
-            Debug.Log("<color=blue>[GameplayManager]</color> Tutorial completed. Loading Gameplay...");
-            StartCoroutine(LoadGameplayCoroutine());
-        }
-        else
-        {
-            Debug.Log("<color=magenta>[GameplayManager]</color> Level completed. Returning to main menu.");
-            LoadMainMenu();
-        }
+        Debug.Log("<color=magenta>[GameplayManager]</color> Level completed. Returning to main menu.");
 
         ServiceProvider.RemoveService<IGameplayManager>();
-    }
 
-    private IEnumerator LoadGameplayCoroutine()
-    {
-        sceneLoader.UnloadScene("PersistantGameplay");
-
-        if (sceneLoader.IsSceneLoaded("PersistantGameplay"))
-            yield return null;
-
-        sceneLoader.LoadScene("PersistantGameplay", LoadSceneMode.Additive);
-
-        if (!sceneLoader.IsSceneLoaded("PersistantGameplay"))
-            yield return null;
-
-        sceneLoader.LoadScene("Gameplay", LoadSceneMode.Additive);
-
-        if (!sceneLoader.IsSceneLoaded("Gameplay"))
-            yield return null;
-
-        HideCursor();
-
-        sceneLoader.UnloadScene("Tutorial");
-
-        if (sceneLoader.IsSceneLoaded("Tutorial"))
-            yield return null;
-    }
-
-
-    private void LoadMainMenu()
-    {
-        sceneLoader.UnloadScene("PersistantGameplay");
-
-        if (isTutorial)
-            sceneLoader.UnloadScene("Tutorial");
-        else
-            sceneLoader.UnloadScene("Gameplay");
-
-        sceneLoader.LoadScene("MainMenu", LoadSceneMode.Additive);
-        ShowCursor();
-    }
-
-    private void HideCursor()
-    {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-
-    private void ShowCursor()
-    {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.Confined;
+        iGameManager.LevelCompleted();
     }
 }

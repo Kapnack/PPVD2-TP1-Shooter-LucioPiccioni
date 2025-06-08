@@ -1,10 +1,10 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
 public class PlayerHudManager : MonoBehaviour
 {
-    [SerializeField] private GameObject player;
-    private Player playerScript;
+    private IPlayer iPlayer;
 
     private Canvas canvas;
 
@@ -20,43 +20,80 @@ public class PlayerHudManager : MonoBehaviour
 
     protected void Awake()
     {
-        playerScript = player.GetComponent<Player>();
-
         canvas = GetComponent<Canvas>();
 
         killsText = killsCanvas.GetComponent<TextMeshProUGUI>();
         healthText = healthCanvas.GetComponent<TextMeshProUGUI>();
         shieldText = shieldCanvas.GetComponent<TextMeshProUGUI>();
         ammoText = ammoCanvas.GetComponent<TextMeshProUGUI>();
+
+        StartCoroutine(FindIPlayer());
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        UpdateAmmoHud();
+        if (iPlayer == null) return;
 
+        iPlayer.OnKill -= UpdateKillsHud;
+        iPlayer.OnHealthChange -= UpdateHealthHud;
+        iPlayer.OnHealthChange -= UpdateShieldHud;
+        iPlayer.OnAmmoChange -= UpdateAmmoHud;
+    }
+
+    private IEnumerator FindIPlayer()
+    {
+        IPlayer iPlayer;
+
+        while (ServiceProvider.TryGetService<IPlayer>(out iPlayer))
+            yield return null;
+
+        this.iPlayer = iPlayer;
+
+        SubscribeToEvents();
+        UpdateAll();
+    }
+
+    private void SubscribeToEvents()
+    {
+        iPlayer.OnKill += UpdateKillsHud;
+        iPlayer.OnHealthChange += UpdateHealthHud;
+        iPlayer.OnHealthChange += UpdateShieldHud;
+        iPlayer.OnAmmoChange += UpdateAmmoHud;
+    }
+
+    private void UpdateAll()
+    {
+        UpdateKillsHud();
         UpdateHealthHud();
         UpdateShieldHud();
-
-        UpdateKillsHud();
+        UpdateAmmoHud();
     }
 
     public void UpdateKillsHud()
     {
-        killsText.text = "Kills: " + playerScript.Kills;
+        if (iPlayer != null) return;
+
+        killsText.text = "Kills: " + iPlayer.Kills;
     }
 
     public void UpdateHealthHud()
     {
-        healthText.text = "HP: " + playerScript.ActualHealth + " / " + playerScript.maxHealth;
+        if (iPlayer != null) return;
+
+        healthText.text = "HP: " + iPlayer.ActualHealth + " / " + iPlayer.MaxHealth;
     }
 
     public void UpdateShieldHud()
     {
-        shieldText.text = "ARM: " + playerScript.ActualShield + " / " + playerScript.maxShield;
+        if (iPlayer != null) return;
+
+        shieldText.text = "ARM: " + iPlayer.ActualShield + " / " + iPlayer.MaxShield;
     }
 
     public void UpdateAmmoHud()
     {
-        ammoText.text = playerScript.GetCurrentWeaponAmmo() + " / " + playerScript.GetCurrentWeaponMaxAmmo();
+        if (iPlayer != null) return;
+
+        ammoText.text = iPlayer.GetCurrentWeaponAmmo() + " / " + iPlayer.GetCurrentWeaponMaxAmmo();
     }
 }

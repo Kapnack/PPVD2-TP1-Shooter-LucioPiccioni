@@ -18,13 +18,10 @@ public class PauseManager : MonoBehaviour
 
     public void WantToExit()
     {
-        sceneLoader.LoadScene("ConfirmExit", LoadSceneMode.Additive, false);
     }
 
     public void GoToMenu()
     {
-        sceneLoader.LoadScene("MainMenu", LoadSceneMode.Additive, false);
-
         Time.timeScale = 1.0f;
     }
 
