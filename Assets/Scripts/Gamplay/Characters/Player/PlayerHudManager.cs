@@ -44,7 +44,7 @@ public class PlayerHudManager : MonoBehaviour
     {
         IPlayer iPlayer;
 
-        while (ServiceProvider.TryGetService<IPlayer>(out iPlayer))
+        while (!ServiceProvider.TryGetService<IPlayer>(out iPlayer))
             yield return null;
 
         this.iPlayer = iPlayer;
@@ -71,28 +71,28 @@ public class PlayerHudManager : MonoBehaviour
 
     public void UpdateKillsHud()
     {
-        if (iPlayer != null) return;
+        if (iPlayer == null) return;
 
         killsText.text = "Kills: " + iPlayer.Kills;
     }
 
     public void UpdateHealthHud()
     {
-        if (iPlayer != null) return;
+        if (iPlayer == null) return;
 
         healthText.text = "HP: " + iPlayer.ActualHealth + " / " + iPlayer.MaxHealth;
     }
 
     public void UpdateShieldHud()
     {
-        if (iPlayer != null) return;
+        if (iPlayer == null) return;
 
         shieldText.text = "ARM: " + iPlayer.ActualShield + " / " + iPlayer.MaxShield;
     }
 
     public void UpdateAmmoHud()
     {
-        if (iPlayer != null) return;
+        if (iPlayer == null) return;
 
         ammoText.text = iPlayer.GetCurrentWeaponAmmo() + " / " + iPlayer.GetCurrentWeaponMaxAmmo();
     }

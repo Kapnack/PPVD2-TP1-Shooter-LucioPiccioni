@@ -7,14 +7,32 @@ public interface IPlayer
     public event Action OnKill;
     public event Action OnHealthChange;
 
+    public float ActualHealth
+    {
+        set;
+        get;
+    }
 
-    public float ActualHealth { get; }
-    public float ActualShield { get; }
+    public int Kills
+    {
+        get;
+    }
 
-    public float MaxShield { get; }
-    public float MaxHealth { get; }
+    public float ActualShield
+    {
+        set;
+        get;
+    }
 
-    public int Kills { get; }
+    public float MaxHealth
+    {
+        get;
+    }
+
+    public float MaxShield
+    {
+        get;
+    }
 
     public float GetCurrentWeaponAmmo();
     public float GetCurrentWeaponMaxAmmo();

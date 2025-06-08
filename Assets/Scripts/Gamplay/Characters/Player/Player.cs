@@ -21,6 +21,10 @@ public class Player : Characters, IPlayer
     [SerializeField] private float grabDistance = 25.0f;
     [SerializeField] float grabSphereRadius = 1.25f;
 
+    [Header("Meele Attack")]
+    [SerializeField] float rangeX = 2f;
+    [SerializeField] float rangeY = 2f;
+
     [Header("View Settings")]
     [SerializeField] private float viewAngleThreshold = 30f;
 
@@ -117,6 +121,8 @@ public class Player : Characters, IPlayer
             gunsScripts[(int)currentSlot].TryFire();
         else
             MeleeAttack();
+
+        OnAmmoChange?.Invoke();
     }
 
     private void HoldingFire() => isHoldingFire = true;
@@ -125,6 +131,7 @@ public class Player : Characters, IPlayer
     private void Reload()
     {
         gunsScripts[(int)currentSlot]?.TryReload();
+        OnAmmoChange?.Invoke();
     }
 
     private void ChangeToWeapon1() => ChangeWeapon(0);
@@ -189,9 +196,6 @@ public class Player : Characters, IPlayer
 
     private void MeleeAttack()
     {
-        float rangeX = 2f;
-        float rangeY = 2f;
-
         Vector3 center = transform.position + cam.transform.forward * 2f;
         Collider[] hits = Physics.OverlapBox(center, new Vector3(rangeX, rangeY, rangeX), Quaternion.identity);
 
@@ -213,7 +217,7 @@ public class Player : Characters, IPlayer
 
         if (closestTarget != null)
         {
-            closestTarget.ReciveDamage(30f); // Daño cuerpo a cuerpo
+            closestTarget.ReciveDamage(30f);
             Debug.Log("<color=yellow>[Player]</color> Melee hit to " + closestTarget.name);
         }
 
