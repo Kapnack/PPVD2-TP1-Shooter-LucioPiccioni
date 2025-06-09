@@ -6,12 +6,19 @@ public class GameManager : MonoBehaviour, IGameManager
 {
     private ISceneLoader iSceneLoader;
 
+    [Header("Scenes References")]
     [SerializeField] private SceneRef mainMenu;
-
     [SerializeField] private SceneRef persistantGameplay;
-
+    [SerializeField] private SceneRef tutorial;
     [SerializeField] private List<SceneRef> levelScenes = new List<SceneRef>();
 
+    private bool isTutorialCompleted = false;
+
+    public bool IsTutorialCompleted
+    {
+        get => isTutorialCompleted;
+    }
+    
     private int currentLevelIndex = 0;
 
     public int CurrentLevelIndex
@@ -48,6 +55,7 @@ public class GameManager : MonoBehaviour, IGameManager
         }
     }
 
+    [ContextMenu("Load Main Menu")]
     public void LoadMainMenu()
     {
         ShowCursor();
@@ -56,14 +64,18 @@ public class GameManager : MonoBehaviour, IGameManager
 
         iSceneLoader.LoadScene(mainMenu);
     }
+    
+    [ContextMenu("Load Tutorial")]
     public void LoadTutorial()
     {
         iSceneLoader.UnloadAll(persistantGameplay);
 
         TryLoadPersistantGameplay();
 
-        iSceneLoader.LoadScene(levelScenes[0]);
+        iSceneLoader.LoadScene(tutorial);
     }
+    
+    [ContextMenu("Load Current Level")]
     public void LoadCurrentLevel()
     {
         iSceneLoader.UnloadAll(persistantGameplay);
@@ -78,14 +90,21 @@ public class GameManager : MonoBehaviour, IGameManager
             LoadMainMenu();
         }
     }
-
+    
+    [ContextMenu("Complete Current Level")]
     public void LevelCompleted()
     {
         currentLevelIndex++;
-
         LoadCurrentLevel();
     }
 
+    [ContextMenu("Complete Tutorial")]
+    public void TutorialCompleted()
+    {
+        isTutorialCompleted = true;
+        LoadCurrentLevel(); 
+    }
+    
     public void HideCursor()
     {
         Cursor.visible = false;

@@ -3,22 +3,21 @@ using UnityEngine.InputSystem;
 
 public class MainMenuManager : MonoBehaviour
 {
-    private IGameManager gameManager;
+    private IGameManager iGameManager;
 
-    [Header("Canvas")]
-    [SerializeField] private GameObject mainMenu;
+    [Header("Canvas")] [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject credits;
 
-    [Header("ESC Action")]
-    [SerializeField] private @InputSystem_Actions action;
+    [Header("ESC Action")] [SerializeField]
+    private @InputSystem_Actions action;
 
-    [Header("Botón de Jugar")]
-    [SerializeField] private GameObject playButton;
+    [Header("Botï¿½n de Jugar")] [SerializeField]
+    private GameObject playButton;
 
     private void Awake()
     {
         if (ServiceProvider.TryGetService<IGameManager>(out var gameManager))
-            this.gameManager = gameManager;
+            this.iGameManager = gameManager;
 
         credits.SetActive(false);
 
@@ -30,13 +29,13 @@ public class MainMenuManager : MonoBehaviour
 
     public void LoadGameplay()
     {
-        if (gameManager.CurrentLevelIndex != 0)
-            gameManager.LoadCurrentLevel();
+        if (iGameManager.IsTutorialCompleted)
+            iGameManager.LoadCurrentLevel();
     }
 
     public void LoadTutorial()
     {
-        gameManager.LoadTutorial();
+        iGameManager.LoadTutorial();
     }
 
     public void LoadCredits()

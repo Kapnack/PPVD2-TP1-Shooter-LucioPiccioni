@@ -1,7 +1,7 @@
 public interface IGameManager
 {
     public int CurrentLevelIndex { get; }
-
+    public bool IsTutorialCompleted { get;}
     public void HideCursor();
 
     public void ShowCursor();
