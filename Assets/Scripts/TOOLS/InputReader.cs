@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputReader : MonoBehaviour
+public class InputReader : MonoBehaviour, IInputReader
 {
     [SerializeField] private InputActionAsset inputAsset;
     InputActionMap actionMap;
@@ -46,9 +46,9 @@ public class InputReader : MonoBehaviour
 
     public event Action DropWeaponEvent;
 
-    protected void Awake()
+    private void Awake()
     {
-        ServiceProvider.SetService(this);
+        ServiceProvider.SetService<IInputReader>(this);
 
         actionMap = inputAsset.FindActionMap("Player");
 
@@ -106,15 +106,6 @@ public class InputReader : MonoBehaviour
         actionDropWeapon.started += HandleDropWeapon;
     }
 
-    private void HandleDropWeapon(InputAction.CallbackContext context)
-    {
-        DropWeaponEvent?.Invoke();
-    }
-
-    private void HandleInteract(InputAction.CallbackContext context)
-    {
-        InteractEvent?.Invoke();
-    }
 
     private void OnDisable()
     {
@@ -221,6 +212,15 @@ public class InputReader : MonoBehaviour
     private void HandleChangeWeapon2(InputAction.CallbackContext ctx)
     {
         ChangeWeapon2Event?.Invoke();
+    }
+    private void HandleDropWeapon(InputAction.CallbackContext context)
+    {
+        DropWeaponEvent?.Invoke();
+    }
+
+    private void HandleInteract(InputAction.CallbackContext context)
+    {
+        InteractEvent?.Invoke();
     }
 
     //----------------------------- MeleeAttack --------------------------------------------

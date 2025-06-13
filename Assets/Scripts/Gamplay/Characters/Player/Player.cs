@@ -29,7 +29,7 @@ public class Player : Characters, IPlayer
     [SerializeField] private float viewAngleThreshold = 30f;
 
     private Gun[] gunsScripts = new Gun[2];
-    private InputReader inputReader;
+    private IInputReader iInputReader;
 
     private Slots currentSlot;
     private bool isHoldingFire = false;
@@ -50,8 +50,8 @@ public class Player : Characters, IPlayer
     {
         OnAwake();
 
-        if (ServiceProvider.TryGetService<InputReader>(out var input))
-            inputReader = input;
+        if (ServiceProvider.TryGetService<IInputReader>(out var iInputReader))
+            this.iInputReader = iInputReader;
 
         for (int i = 0; i < gunsObj.Length; i++)
         {
@@ -67,47 +67,47 @@ public class Player : Characters, IPlayer
         ServiceProvider.SetService<IPlayer>(this, true);
     }
 
+    private void Start()
+    {
+        
+    }
+
     private void OnEnable()
     {
-        inputReader.FireEvent += Fire;
-        inputReader.HoldigFireEvent += HoldingFire;
-        inputReader.StopHoldigFireEvent += StopFire;
+        iInputReader.FireEvent += Fire;
+        iInputReader.HoldigFireEvent += HoldingFire;
+        iInputReader.StopHoldigFireEvent += StopFire;
 
-        inputReader.ReloadEvent += Reload;
-        inputReader.ChangeWeapon1Event += ChangeToWeapon1;
-        inputReader.ChangeWeapon2Event += ChangeToWeapon2;
+        iInputReader.ReloadEvent += Reload;
+        iInputReader.ChangeWeapon1Event += ChangeToWeapon1;
+        iInputReader.ChangeWeapon2Event += ChangeToWeapon2;
 
-        inputReader.InteractEvent += GrabWeapon;
-        inputReader.DropWeaponEvent += DropGun;
+        iInputReader.InteractEvent += GrabWeapon;
+        iInputReader.DropWeaponEvent += DropGun;
 
-        inputReader.MeleeAttackEvent += MeleeAttack;
+        iInputReader.MeleeAttackEvent += MeleeAttack;
     }
 
     private void OnDisable()
     {
-        inputReader.FireEvent -= Fire;
-        inputReader.HoldigFireEvent -= HoldingFire;
-        inputReader.StopHoldigFireEvent -= StopFire;
+        iInputReader.FireEvent -= Fire;
+        iInputReader.HoldigFireEvent -= HoldingFire;
+        iInputReader.StopHoldigFireEvent -= StopFire;
 
-        inputReader.ReloadEvent -= Reload;
-        inputReader.ChangeWeapon1Event -= ChangeToWeapon1;
-        inputReader.ChangeWeapon2Event -= ChangeToWeapon2;
+        iInputReader.ReloadEvent -= Reload;
+        iInputReader.ChangeWeapon1Event -= ChangeToWeapon1;
+        iInputReader.ChangeWeapon2Event -= ChangeToWeapon2;
 
-        inputReader.InteractEvent -= GrabWeapon;
-        inputReader.DropWeaponEvent -= DropGun;
+        iInputReader.InteractEvent -= GrabWeapon;
+        iInputReader.DropWeaponEvent -= DropGun;
 
-        inputReader.MeleeAttackEvent -= MeleeAttack;
+        iInputReader.MeleeAttackEvent -= MeleeAttack;
     }
 
     private void Update()
     {
         if (isHoldingFire)
             Fire();
-    }
-
-    public override bool IsDead()
-    {
-        return base.IsDead();
     }
 
     protected override void OnDead()
@@ -118,11 +118,13 @@ public class Player : Characters, IPlayer
     private void Fire()
     {
         if (gunsScripts[(int)currentSlot] != null)
+        {
             gunsScripts[(int)currentSlot].TryFire();
+            OnAmmoChange?.Invoke();
+        }
         else
             MeleeAttack();
 
-        OnAmmoChange?.Invoke();
     }
 
     private void HoldingFire() => isHoldingFire = true;
@@ -130,8 +132,7 @@ public class Player : Characters, IPlayer
 
     private void Reload()
     {
-        gunsScripts[(int)currentSlot]?.TryReload();
-        OnAmmoChange?.Invoke();
+        gunsScripts[(int)currentSlot]?.TryReload(OnAmmoChange);
     }
 
     private void ChangeToWeapon1() => ChangeWeapon(0);
@@ -184,9 +185,6 @@ public class Player : Characters, IPlayer
 
         if (Physics.SphereCast(origin, grabSphereRadius, direction, out RaycastHit hit, grabDistance, interactableLayer))
         {
-            Debug.DrawRay(origin, direction * hit.distance, Color.yellow, 1f);
-            Debug.DrawRay(hit.point, Vector3.up * 0.5f, Color.red, 1f);
-
             if (hit.transform.TryGetComponent(out Gun gun))
                 return gun;
         }

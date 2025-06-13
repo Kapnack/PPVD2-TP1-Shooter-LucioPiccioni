@@ -1,19 +1,28 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameState : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
 
-    InputReader inputReader;
+    IInputReader iInputReader;
     IGameManager iGameManager;
+    IEventSystemManager iEventSystemManager;
+
+    [SerializeField] GridLayoutGroup gridLayoutGroup;
 
     private void Awake()
     {
-        if (ServiceProvider.TryGetService<InputReader>(out var inputReader))
-            this.inputReader = inputReader;
+        gridLayoutGroup = GetComponentInChildren<GridLayoutGroup>();
+
+        if (ServiceProvider.TryGetService<IInputReader>(out var iInputReader))
+            this.iInputReader = iInputReader;
 
         if (ServiceProvider.TryGetService<IGameManager>(out var iGameManager))
             this.iGameManager = iGameManager;
+
+        if (ServiceProvider.TryGetService<IEventSystemManager>(out var iEventSystemManager))
+            this.iEventSystemManager = iEventSystemManager;
 
         pauseMenu.SetActive(false);
 
@@ -22,12 +31,12 @@ public class GameState : MonoBehaviour
 
     private void OnEnable()
     {
-        inputReader.PauseEvent += OnPause;
+        iInputReader.PauseEvent += OnPause;
     }
 
     private void OnDisable()
     {
-        inputReader.PauseEvent -= OnPause;
+        iInputReader.PauseEvent -= OnPause;
     }
 
     private void OnPause()
@@ -35,6 +44,8 @@ public class GameState : MonoBehaviour
         if (!pauseMenu.activeInHierarchy)
         {
             pauseMenu.SetActive(true);
+
+            iEventSystemManager.SetSelectedObject(gridLayoutGroup);
 
             iGameManager.ShowCursor();
 

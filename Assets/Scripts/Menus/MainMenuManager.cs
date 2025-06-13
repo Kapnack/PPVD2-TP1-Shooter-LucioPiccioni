@@ -11,8 +11,13 @@ public class MainMenuManager : MonoBehaviour
     [Header("ESC Action")] [SerializeField]
     private @InputSystem_Actions action;
 
-    [Header("Bot�n de Jugar")] [SerializeField]
+    [Header("Play Button")]
+    [SerializeField]
     private GameObject playButton;
+
+    [Header("Button Grid Layout")]
+    [SerializeField]
+    private GridLayout gridLayout;
 
     private void Awake()
     {

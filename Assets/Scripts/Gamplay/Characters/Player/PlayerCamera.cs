@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    InputReader inputReader = null;
+    IInputReader iInputReader;
 
     [SerializeField] private Camera cam;
     private float xRatation = 0.0f;
@@ -23,32 +23,29 @@ public class PlayerCamera : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        if (ServiceProvider.TryGetService<InputReader>(out var inputReader))
-            this.inputReader = inputReader;
+        if (ServiceProvider.TryGetService<IInputReader>(out var iInputReader))
+            this.iInputReader = iInputReader;
     }
 
     private void OnEnable()
     {
-        inputReader.lookEvent += OnMoveCamera;
-        inputReader.lookEventHolding += OnHoldingLook;
-        inputReader.lookEventCanceled += OnCanceledLook;
+        iInputReader.lookEvent += OnMoveCamera;
+        iInputReader.lookEventHolding += OnHoldingLook;
+        iInputReader.lookEventCanceled += OnCanceledLook;
     }
 
     private void OnDisable()
     {
-        if (ServiceProvider.TryGetService<InputReader>(out var inputReader))
-        {
-            inputReader.lookEvent -= OnMoveCamera;
-            inputReader.lookEventHolding -= OnHoldingLook;
-            inputReader.lookEventCanceled -= OnCanceledLook;
-        }
+        iInputReader.lookEvent -= OnMoveCamera;
+        iInputReader.lookEventHolding -= OnHoldingLook;
+        iInputReader.lookEventCanceled -= OnCanceledLook;
     }
 
     private void Update()
     {
         if (isHoldingMoving)
         {
-            Vector2 lookInput = inputReader.GetLookVector2();
+            Vector2 lookInput = iInputReader.GetLookVector2();
             OnMoveCamera(lookInput);
         }
     }

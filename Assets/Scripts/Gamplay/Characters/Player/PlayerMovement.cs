@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float deceleration = 40f;
 
     private Rigidbody rb;
-    private InputReader inputReader;
+    private IInputReader iInputReader;
 
     private bool isJumpRequested;
     private bool isHoldingJump;
@@ -29,24 +29,24 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        if (ServiceProvider.TryGetService<InputReader>(out var inputReader))
-            this.inputReader = inputReader;
+        if (ServiceProvider.TryGetService<IInputReader>(out var iInputReader))
+            this.iInputReader = iInputReader;
     }
 
     private void OnEnable()
     {
-        inputReader.MoveEvent += OnMove;
-        inputReader.JumpEvent += OnJump;
-        inputReader.JumpHoldEvent += OnJumpHold;
-        inputReader.JumpReleaseEvent += OnJumpRelease;
+        iInputReader.MoveEvent += OnMove;
+        iInputReader.JumpEvent += OnJump;
+        iInputReader.JumpHoldEvent += OnJumpHold;
+        iInputReader.JumpReleaseEvent += OnJumpRelease;
     }
 
     private void OnDisable()
     {
-        inputReader.MoveEvent -= OnMove;
-        inputReader.JumpEvent -= OnJump;
-        inputReader.JumpHoldEvent -= OnJumpHold;
-        inputReader.JumpReleaseEvent -= OnJumpRelease;
+        iInputReader.MoveEvent -= OnMove;
+        iInputReader.JumpEvent -= OnJump;
+        iInputReader.JumpHoldEvent -= OnJumpHold;
+        iInputReader.JumpReleaseEvent -= OnJumpRelease;
     }
 
     private void FixedUpdate()

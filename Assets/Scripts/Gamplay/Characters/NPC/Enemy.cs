@@ -1,6 +1,6 @@
 public class Enemy : Characters
 {
-    protected IPlayer iPlayer;
+    static protected IPlayer iPlayer;
     static public IGameplayManager gameplayManager;
 
     protected virtual void Start()

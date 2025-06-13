@@ -26,8 +26,6 @@ public class PlayerHudManager : MonoBehaviour
         healthText = healthCanvas.GetComponent<TextMeshProUGUI>();
         shieldText = shieldCanvas.GetComponent<TextMeshProUGUI>();
         ammoText = ammoCanvas.GetComponent<TextMeshProUGUI>();
-
-        StartCoroutine(FindIPlayer());
     }
 
     private void OnDisable()
@@ -40,7 +38,7 @@ public class PlayerHudManager : MonoBehaviour
         iPlayer.OnAmmoChange -= UpdateAmmoHud;
     }
 
-    private IEnumerator FindIPlayer()
+    private IEnumerator Start()
     {
         IPlayer iPlayer;
 
@@ -80,14 +78,14 @@ public class PlayerHudManager : MonoBehaviour
     {
         if (iPlayer == null) return;
 
-        healthText.text = "HP: " + iPlayer.ActualHealth + " / " + iPlayer.MaxHealth;
+        healthText.text = "HP: " + iPlayer.CurrentHealth + " / " + iPlayer.MaxHealth;
     }
 
     public void UpdateShieldHud()
     {
         if (iPlayer == null) return;
 
-        shieldText.text = "ARM: " + iPlayer.ActualShield + " / " + iPlayer.MaxShield;
+        shieldText.text = "ARM: " + iPlayer.CurrentShield + " / " + iPlayer.MaxShield;
     }
 
     public void UpdateAmmoHud()

@@ -1,25 +1,24 @@
 using UnityEngine;
 
-public abstract class Characters : MonoBehaviour
+public abstract class Characters : MonoBehaviour, IHealthSystem
 {
     [Header("Life")]
     [SerializeField] public int _maxHealth = 100;
-    private float _actualHealth;
+    private float _currentHealth;
 
     [Header("Shield")]
     [SerializeField] public int _maxShield = 50;
-    private float _actualShield;
+    private float _currentShield;
 
-    public float ActualHealth
+    public float CurrentHealth
     {
-        set => _actualHealth = Mathf.Clamp(value, 0, _maxHealth);
-        get => _actualHealth;
+        set => _currentHealth = Mathf.Clamp(value, 0, _maxHealth);
+        get => _currentHealth;
     }
 
-    public float ActualShield
+    public float CurrentShield
     {
-        set => _actualShield = Mathf.Clamp(value, 0, _maxShield);
-        get => _actualShield;
+        get => _currentShield;
     }
 
     public float MaxHealth
@@ -34,40 +33,47 @@ public abstract class Characters : MonoBehaviour
 
     protected void OnAwake()
     {
-        _actualHealth = _maxHealth;
-        _actualShield = _maxShield;
+        _currentHealth = _maxHealth;
+        _currentShield = _maxShield;
     }
 
     public virtual void ReciveDamage(float damage)
     {
-        if (_actualShield > 0)
+        if (_currentShield > 0)
         {
-            _actualShield -= damage;
+            _currentShield -= damage;
 
-            if (_actualShield < 0)
+            if (_currentShield < 0)
             {
-                float remainingDamage = -_actualShield;
-                _actualShield = 0;
-                ActualHealth -= remainingDamage;
+                float remainingDamage = -_currentShield;
+                _currentShield = 0;
+                CurrentHealth -= remainingDamage;
             }
         }
         else
         {
-            ActualHealth -= damage;
+            CurrentHealth -= damage;
         }
 
         if (IsDead())
             OnDead();
     }
 
-    public virtual bool IsDead() => ActualShield == 0 && ActualHealth == 0;
+    public bool IsDead()
+    {
+        return CurrentShield == 0 && CurrentHealth == 0;
+    }
 
     protected abstract void OnDead();
 
-    public void OnValidate()
+    private void OnValidate()
     {
-        ActualHealth = _maxHealth;
+        ResetHealth();
+    }
 
-        ActualShield = _maxShield;
+    public void ResetHealth()
+    {
+        _currentHealth = _maxHealth;
+        _currentShield = _maxShield;
     }
 }

@@ -101,6 +101,10 @@ public class GameplayManager : MonoBehaviour, IGameplayManager
     private void OnPlayerLose()
     {
         Debug.Log("<color=red>[GameplayManager]</color> Player is dead. You lost.");
+
+        ServiceProvider.RemoveService<IGameplayManager>();
+
+        iGameManager.LoadMainMenu();
     }
 
     public void LoadNextLevel()

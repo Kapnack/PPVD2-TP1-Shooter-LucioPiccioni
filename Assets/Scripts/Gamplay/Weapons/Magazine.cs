@@ -9,6 +9,8 @@ public class Magazine
     [SerializeField] private float reloadingTime;
     private float currentAmmo;
 
+    public event Action OnFinishedReloading;
+
     float realoadStarted = 0.0f;
 
     bool reloading = false;
@@ -49,15 +51,22 @@ public class Magazine
         {
             CurrentAmmo = maxAmmo;
             reloading = false;
+
+            OnFinishedReloading?.Invoke();
+            OnFinishedReloading = null;
         }
+
     }
 
-    public void StartReload()
+    public void StartReload(Action OnFishReloading = null)
     {
         if (!reloading)
         {
             realoadStarted = Time.time;
             reloading = true;
+
+            if (OnFishReloading != null)
+                OnFinishedReloading += OnFishReloading;
         }
     }
 

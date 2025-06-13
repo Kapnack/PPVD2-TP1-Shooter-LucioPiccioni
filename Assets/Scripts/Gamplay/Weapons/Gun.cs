@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -67,11 +67,11 @@ public abstract class Gun : MonoBehaviour
         }
     }
 
-    public void TryReload()
+    public void TryReload(Action onAmmoChange = null)
     {
         if (!magazine.Reloading && !magazine.IsFull())
         {
-            magazine.StartReload();
+            magazine.StartReload(onAmmoChange);
         }
     }
 
@@ -80,7 +80,7 @@ public abstract class Gun : MonoBehaviour
         transform.SetParent(hand);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, 180f));
-        transform.localScale = Vector3.one;
+        //transform.localScale = Vector3.one;
 
         rb.isKinematic = true;
 
@@ -100,9 +100,9 @@ public abstract class Gun : MonoBehaviour
         rb.AddForce(transform.forward * dropForwardForce, ForceMode.Impulse);
         rb.AddForce(transform.up * dropUpwardForce, ForceMode.Impulse);
 
-        float random = Random.Range(-1f, 1f);
-
-        rb.AddTorque(new Vector3(random, random, random) * 10);
+        //float random = Random.Range(-1f, 1f);
+        //
+        //rb.AddTorque(new Vector3(random, random, random) * 10);
 
         gameObject.layer = dropedLayer;
 

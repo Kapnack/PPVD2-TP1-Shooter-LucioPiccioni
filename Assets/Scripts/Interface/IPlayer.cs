@@ -7,9 +7,8 @@ public interface IPlayer
     public event Action OnKill;
     public event Action OnHealthChange;
 
-    public float ActualHealth
+    public float CurrentHealth
     {
-        set;
         get;
     }
 
@@ -18,9 +17,8 @@ public interface IPlayer
         get;
     }
 
-    public float ActualShield
+    public float CurrentShield
     {
-        set;
         get;
     }
 
